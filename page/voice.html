@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI语音</title>
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 30px;
+      }
+      .box {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(206, 25, 25, 0.1);
+        text-align: center;
+      }
+      .top {
+        font-size: 24px;
+        color: #333;
+      }
+      .select,
+      .input {
+        margin: 10px 0;
+      }
+      .bottom button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 12px;
+      }
+      .bottom button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 进场语音 -->
+    <div class="box">
+      <div class="top">巷的AI语音转换</div>
+      <div class="select">
+        <select id="figure"></select>
+      </div>
+      <div class="input">
+        <input type="text" id="text" placeholder="请输入语音转换文本" />
+      </div>
+      <div class="content"></div>
+      <div class="bottom">
+        <button onclick="buttom()">点击生成语音</button>
+      </div>
+      <div class="audio">
+        <audio id="audioVideo" controls></audio>
+      </div>
+    </div>
+    <script>
+      const names = [
+        "希宣",
+        "莹夕",
+        "月婷",
+        "芳华",
+        "禹锡",
+        "大成",
+        "雨棠",
+        "艾丽",
+      ];
+
+      const selectElement = document.getElementById("figure");
+
+      for (var i = 0; i < names.length; i++) {
+        const optionElement = document.createElement("option");
+        optionElement.value = names[i];
+        optionElement.text = names[i];
+        selectElement.appendChild(optionElement);
+      }
+
+      function buttom() {
+        const speak = document.getElementById("figure").value;
+        const text = document.getElementById("text").value;
+        const src = `https://api.pearktrue.cn/api/aivoice/?speak=${speak}&text=${text}`;
+        fetch(src)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            const audioVideo = document.getElementById("audioVideo");
+            audioVideo.src = data.voice;
+
+            audioVideo.play();
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
