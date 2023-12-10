@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0000" />
+    <!--  <link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Inter:wght@400;500&display=swap" rel="stylesheet"> -->
+    <title>巷的新年倒计时</title>
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
+    <meta name="author" content="Thiri San" />
+    <meta name="keywords" content="Thiri San" />
+  </head>
+  <body>
+    <h1>
+      <span id="year">2023</span>
+      元旦倒计时
+    </h1>
+    <h2>祝看到的宝子团团圆圆，新的一年新气象。</h2>
+    <h2>愿我的祝福温暖你的手头，直达你的心头，新的一年里快快乐乐！！！</h2>
+    <div class="countdown-container">
+      <div class="countdel days-c">
+        <p class="big-text" id="days">0</p>
+        <span>天</span>
+      </div>
+      <div class="countdel hours-c">
+        <p class="big-text" id="hours">0</p>
+        <span>时</span>
+      </div>
+      <div class="countdel minutes-c">
+        <p class="big-text" id="minutes">0</p>
+        <span>分</span>
+      </div>
+      <div class="countdel seconds-c">
+        <p class="big-text" id="seconds">0</p>
+        <span>秒</span>
+      </div>
+    </div>
+  </body>
+  <style type="text/css">
+    @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-image: url("../img/yuandan.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: top center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vm;
+      font-family: "Lobster", cursive, sans-serif;
+      margin: 0;
+    }
+
+    .big-text {
+      color: rgb(255, 215, 0);
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+      line-height: 0.5;
+      margin: 3rem;
+    }
+
+    h1 {
+      color: gold;
+
+      font-size: 3rem;
+      margin-top: 120px;
+    }
+
+    h2 {
+      color: yellow;
+      margin: 25px;
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .countdown-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .countdel {
+      color: black;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+
+  <script>
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+
+    const x = new Date().getFullYear();
+    const y = x + 1;
+    const newYear = new Date(y, 0, 1, 0, 0, 0, 0);
+
+    function countdown() {
+      const newYearsDate = new Date(newYear);
+      const currentDate = new Date();
+
+      const totalSeconds = (newYearsDate - currentDate) / 1000;
+      const year = currentDate.getFullYear() + 1;
+      const days = Math.floor(totalSeconds / 3600 / 24);
+      const hours = Math.floor(totalSeconds / 3600) % 24;
+      const minutes = Math.floor(totalSeconds / 60) % 60;
+      const seconds = Math.floor(totalSeconds % 60);
+
+      document.getElementById("year").innerHTML = year;
+      daysEl.innerHTML = days;
+      hoursEl.innerHTML = formatTime(hours);
+      minutesEl.innerHTML = formatTime(minutes);
+      secondsEl.innerHTML = formatTime(seconds);
+    }
+
+    function formatTime(time) {
+      return time < 10 ? `0${time}` : time;
+    }
+
+    countdown();
+    setInterval(countdown, 1000);
+  </script>
+</html>
