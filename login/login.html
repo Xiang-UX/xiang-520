@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mima</title>
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            padding: 2px;
+            margin: 2px;
+        }
+
+        body {
+            background-image: url(../img/2.jpg);
+
+        }
+
+        h1 {
+            text-align: center;
+            color: #00d2e5ea;
+            margin-top: 50px;
+
+        }
+
+        p {
+            color: #fcf809;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 90%;
+            padding: 12px 20px;
+            margin: 9px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            font-size: 15px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 90%;
+            border-radius: 9px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>宝藏页面入口</h1>
+    <div class="login">
+
+        <div>
+            <p>账号：</p><input type="text" id="account" placeholder="请输入账号" class="account">
+            <br>
+
+            <p>密码：</p><input type="password" id="password" placeholder="请输入密码" class="password">
+
+            <br>
+
+            <button type="button" onclick="login()">登录</button>
+        </div>
+    </div>
+
+</body>
+<script>
+
+    function login() {
+        fetch(`login.json`)
+            .then((response) => response.json())
+            .then((data) => {
+                //console.log(data)
+                const account = document.getElementById("account").value;
+                const password = document.getElementById("password").value;
+
+
+
+                for (var i = 0; i < data.account_password.length; i++) {
+                    //如果账号正确
+                    if (data.account_password[i].account === account) {
+                        // console.log(data.account_password[i]);
+                        if (password === data.account_password[i].password) {
+                            //账号密码都正确跳转页面
+                            alert(`尊贵的${data.account_password[i].id}号用户${data.account_password[i].name}，欢迎进入！`)
+                            alert('暂时未放任何东西')
+                            window.location.href = "https://xiang.4everland.app/";
+                        }
+                        //账号正确密码不对
+                        else if (password != data.account_password[i].password) {
+                            alert("密码出错，请重试")
+                        }
+
+                    }
+                    //账号密码都出错
+                    else if (data.account_password[i].account != account) {
+                        alert('账号出错,请重试！');
+                    }
+                    break;
+                }
+            });
+
+
+    }
+</script>
+
+</html>
