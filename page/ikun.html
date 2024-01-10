@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ikun</title>
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .progress {
+        text-align: center;
+
+    }
+
+    .center {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        border-radius: 10px;
+        height: 170px;
+        background-image: url(./img/OIP-C.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        color: rgb(243, 234, 234);
+        padding: 10px 0;
+    }
+
+    progress {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    ul {
+        margin-top: 170px;
+    }
+
+    li {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #bcff05;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 14px;
+        width: 150px;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div class="center">
+        <img src="./img/ikun.png" onclick="stop()">
+        <audio src="" id="myAudio"></audio>
+        <div class="progress">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <p>进度:<samp id="currentTime">0/100</samp></p>
+        </div>
+    </div>
+    <ul></ul>
+
+</body>
+
+<script>
+    const ikun = { '上海鸡': '上海鸡.mp3', '下山鸡': '下山鸡.mp3', '今天你要嫁给鸡': '今天你要嫁给鸡.mp3', '仙剑鸡侠传': '仙剑鸡侠传.mp3', '代言宽带': '代言宽带.mp3', '你干嘛哎呦': '你干嘛哎呦.mp3', '倚天屠龙鸡': '倚天屠龙鸡.mp3', '全是鸡，你是我的谁~': '全是鸡，你是我的谁~.mp3', '全民制作人们大家好': '全民制作人们大家好.mp3', '兰亭鸡序': '兰亭鸡序.mp3', '别看我只是一只鲲': '别看我只是一只鲲.mp3', '千年等一鸡': '千年等一鸡.mp3', '叮叮当当鸡': '叮叮当当鸡.mp3', '听我说谢谢鸡': '听我说谢谢鸡.mp3', '外婆的澎湖鸡': '外婆的澎湖鸡.mp3', '奇鸡再见': '奇鸡再见.mp3', '套鸡杆': '套鸡杆.mp3', '小学生蔡徐坤': '小学生蔡徐坤.mp3', '幻昼鸡': '幻昼鸡.mp3', '影流之鸡': '影流之鸡.mp3', '我和鸡荡秋千': '我和鸡荡秋千.mp3', '我是养鸡的': '我是养鸡的.mp3', '托马鸡小火车': '托马鸡小火车.mp3', '曹鸡': '曹鸡.mp3', '最伟大的鸡': '最伟大的鸡.mp3', '本草鸡目': '本草鸡目.mp3', '本鸡纲目': '本鸡纲目.mp3', '欢乐斗地鸡': '欢乐斗地鸡.mp3', '歌鸡': '歌鸡.mp3', '水手鸡': '水手鸡.mp3', '火红的萨日鸡': '火红的萨日鸡.mp3', '爱鸡': '爱鸡.mp3', '爱鸡公寓': '爱鸡公寓.mp3', '神鸡小将': '神鸡小将.mp3', '稻香鸡': '稻香鸡.mp3', '红日鸡': '红日鸡.mp3', '落入鸡尘': '落入鸡尘.mp3', '蜜雪鸡城': '蜜雪鸡城.mp3', '逆战鸡': '逆战鸡.mp3', '野鸡disco': '野鸡disco.mp3', '鬼灭鸡刃': '鬼灭鸡刃.mp3', '鸡仔很忙': '鸡仔很忙.mp3', '鸡你太美原版': '鸡你太美原版.mp3', '鸡出没': '鸡出没.mp3', '鸡勇者': '鸡勇者.mp3', '鸡卡不列': '鸡卡不列.mp3', '鸡日快乐': '鸡日快乐.mp3', '鸡有儿女': '鸡有儿女.mp3', '鸡给您拜年了': '鸡给您拜年了.mp3', '鸡花瓷': '鸡花瓷.mp3', '鸡里香': '鸡里香.mp3', '鸡鸡侠': '鸡鸡侠.mp3', '黑人抬鸡': '黑人抬鸡.mp3', '黑鸡警长': '黑鸡警长.mp3' }
+
+    const ul = document.createElement('ul'); // 创建ul元素  
+    for (const key in ikun) {
+        if (ikun.hasOwnProperty(key)) { // 确保只遍历对象自身的属性，不包括原型链上的属性
+            const li = document.createElement('li'); // 创建li元素
+            li.textContent = key; // 设置li元素的文本内容为键值对
+            ul.appendChild(li); // 将li元素添加到ul列表中  
+            li.key = ikun[key];
+            // 添加点击事件监听器  
+            li.addEventListener('click', function () {
+                // 获取li元素的自定义属性作为值  
+                const value = this.key;
+                console.log(value); // 打印获取的值
+                const audio = document.querySelector('audio');
+                audio.src = "./music/" + value;
+                audio.play();
+
+            });
+        }
+    }
+
+    document.body.appendChild(ul);
+    let audio = document.getElementById('myAudio');
+    let progressBar = document.getElementById('progressBar');
+
+    audio.addEventListener('timeupdate', function () { // 监听timeupdate事件      
+        const currentTime = Math.floor(this.currentTime); // 获取当前时间（秒）      
+        const duration = Math.floor(this.duration); // 获取总时长（秒）     
+        if (duration > 0) { // 确保音频长度不为0
+            const progress_bar = (currentTime / duration) * 100;
+            progressBar.value = progress_bar  // 更新进度条的值 
+            const schedule = Number(progress_bar.toFixed(2));
+            document.getElementById('currentTime').innerText = schedule + '/100';
+            console.log(schedule)
+        } else {
+            console.log(`总长度为0`);
+        }
+    });
+    function stop() {
+        const audio = document.querySelector('audio');
+        audio.pause();
+        audio.currentTime = 0;
+
+    }
+
+</script>
+
+</html>
