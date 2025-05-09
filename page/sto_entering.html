@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>金华申通车辆通行证录入</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        text-align: center;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .form-container {
+        background: #e7e7e7;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      form input[type="text"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      form button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: #5cb85c;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      form button:hover {
+        background-color: #4cae4c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>通行证录入</h1>
+      <div class="form-container">
+        <h2>添加新通行证</h2>
+        <form id="infoForm">
+          <input type="text" id="name" placeholder="姓名" required />
+          <input type="text" id="plate_number" placeholder="车牌号" required />
+          <input type="text" id="phone" placeholder="电话" required />
+          <input type="text" id="remark" placeholder="备注" />
+          <button type="submit">添加</button>
+        </form>
+      </div>
+      <table id="infoTable">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>车牌号</th>
+            <th>电话</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 数据将通过JavaScript动态插入 -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      // 声明全局变量
+      let currentData = [];
+      let isDataLoaded = false;
+      const dataUrl =
+        "https://gitee.com/api/v5/repos/xiang-520/sto/contents/Employee_list/pass.json?access_token=7f8823412c1b2262f256ee292d7d6fa2";
+
+      // 处理Unicode的Base64编码
+      function utf8ToBase64(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+      }
+
+      // Base64解码
+      function base64ToUtf8(base64) {
+        return decodeURIComponent(escape(atob(base64)));
+      }
+
+      // 获取数据并初始化表格
+      async function fetchDataAndInitTable() {
+        try {
+          const response = await fetch(dataUrl);
+          const data = await response.json();
+          const utf8String = base64ToUtf8(data.content);
+          currentData = JSON.parse(utf8String);
+          isDataLoaded = true;
+          initTable(currentData);
+        } catch (error) {
+          console.error("数据加载失败:", error);
+          alert("数据加载失败，请检查控制台");
+        }
+      }
+
+      // 初始化表格
+      function initTable(data) {
+        const tbody = document.querySelector("#infoTable tbody");
+        tbody.innerHTML = "";
+        data.forEach((item) => {
+          const row = tbody.insertRow();
+          Object.values(item).forEach((value) => {
+            row.insertCell().textContent = value;
+          });
+        });
+      }
+
+      // 检查数据是否存在
+      function isDataExists(name, plate, phone) {
+        return currentData.some(
+          (item) =>
+            item.name === name &&
+            item.plate_number === plate &&
+            item.phone === phone
+        );
+      }
+
+      // 获取文件SHA
+      async function getFileSha() {
+        try {
+          const shaUrl = `https://gitee.com/api/v5/repos/xiang-520/sto/contents/Employee_list/pass.json?access_token=7f8823412c1b2262f256ee292d7d6fa2`;
+          const response = await fetch(shaUrl);
+          const data = await response.json();
+          return data.sha;
+        } catch (error) {
+          console.error("SHA获取失败:", error);
+          throw error;
+        }
+      }
+
+      // 上传数据
+      async function uploadData(data) {
+        try {
+          const sha = await getFileSha();
+          const jsonString = JSON.stringify(data);
+          const base64Content = utf8ToBase64(jsonString);
+
+          const response = await fetch(dataUrl, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+            },
+            body: JSON.stringify({
+              access_token: "7f8823412c1b2262f256ee292d7d6fa2",
+              content: base64Content,
+              sha: sha,
+              message: "Update list",
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP错误: ${response.status}`);
+          }
+
+          console.log("上传成功");
+          return true;
+        } catch (error) {
+          console.error("上传失败:", error);
+          alert("上传失败，请检查控制台");
+          return false;
+        }
+      }
+
+      // 表单提交处理
+      document
+        .getElementById("infoForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          if (!isDataLoaded) {
+            alert("数据正在加载，请稍后提交");
+            return;
+          }
+
+          const formData = {
+            name: document.getElementById("name").value.trim(),
+            plate_number: document.getElementById("plate_number").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            remark: document.getElementById("remark").value.trim(),
+          };
+
+          if (
+            isDataExists(formData.name, formData.plate_number, formData.phone)
+          ) {
+            alert("数据已存在！");
+            return;
+          }
+
+          const newSerial =
+            currentData.length > 0
+              ? parseInt(currentData[currentData.length - 1].serial_number) + 1
+              : 1;
+
+          currentData.push({
+            serial_number: newSerial.toString(),
+            ...formData,
+          });
+
+          const success = await uploadData(currentData);
+          if (success) {
+            await fetchDataAndInitTable();
+            e.target.reset();
+            alert("添加成功！");
+          }
+        });
+
+      // 初始化加载
+      document.addEventListener("DOMContentLoaded", fetchDataAndInitTable);
+    </script>
+  </body>
+</html>
