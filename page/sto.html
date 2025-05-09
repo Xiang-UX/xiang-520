@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>金华申通车辆通行证查询系统</title>
+    <title>通行证查询系统</title>
     <style>
       * {
         box-sizing: border-box;
@@ -84,6 +84,13 @@
         font-weight: bold;
         color: red;
       }
+
+      .no-results {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 20px;
+        color: #666;
+      }
     </style>
   </head>
   <body>
@@ -93,992 +100,133 @@
         id="searchInput"
         placeholder="输入车牌号/姓名/电话进行查询"
       />
-      <button id="searchBtn" onclick="search()">搜索</button>
+      <button id="searchBtn" onclick="handleSearch()">搜索</button>
     </div>
 
     <div class="result-container" id="resultContainer"></div>
 
     <script>
-      // 内嵌数据
-      const data = [
-        {
-          serial_number: "1",
-          name: "范国林",
-          plate_number: "鄂JV7U31",
-          phone: "13912375226",
-          remark: "范总",
-        },
-        {
-          serial_number: "2",
-          name: "董勤峰",
-          plate_number: "浙GDB5558",
-          phone: "18757618801",
-          remark: "董事长",
-        },
-        {
-          serial_number: "3",
-          name: "周以晶",
-          plate_number: "浙G51P22",
-          phone: "13819959867",
-          remark: "",
-        },
-        {
-          serial_number: "4",
-          name: "王帅",
-          plate_number: "浙G5XS86",
-          phone: "15178328351",
-          remark: "",
-        },
-        {
-          serial_number: "5",
-          name: "齐建萍",
-          plate_number: "浙G72PE3",
-          phone: "18395922509",
-          remark: "",
-        },
-        {
-          serial_number: "6",
-          name: "李娜",
-          plate_number: "浙G9X87J",
-          phone: "19857958848",
-          remark: "",
-        },
-        {
-          serial_number: "7",
-          name: "李娜",
-          plate_number: "浙G90RV1",
-          phone: "19857958848",
-          remark: "",
-        },
-        {
-          serial_number: "8",
-          name: "胡金刚",
-          plate_number: "浙G3S37W",
-          phone: "15220001104",
-          remark: "",
-        },
-        {
-          serial_number: "9",
-          name: "曾依菠",
-          plate_number: "川LTT328",
-          phone: "15159835910",
-          remark: "",
-        },
-        {
-          serial_number: "10",
-          name: "徐昱龙",
-          plate_number: "皖J84021",
-          phone: "13955985646",
-          remark: "",
-        },
-        {
-          serial_number: "11",
-          name: "沈钟华",
-          plate_number: "浙A1TD17",
-          phone: "15990109791",
-          remark: "",
-        },
-        {
-          serial_number: "12",
-          name: "王仙华",
-          plate_number: "浙A51CE7",
-          phone: "18968167767",
-          remark: "",
-        },
-        {
-          serial_number: "13",
-          name: "李云方",
-          plate_number: "浙B5F3P2",
-          phone: "13120508769",
-          remark: "车队长",
-        },
-        {
-          serial_number: "14",
-          name: "胡纯昌",
-          plate_number: "浙CF552P",
-          phone: "13780178618",
-          remark: "",
-        },
-        {
-          serial_number: "15",
-          name: "张建勇",
-          plate_number: "浙D7B67X",
-          phone: "13754363217",
-          remark: "",
-        },
-        {
-          serial_number: "16",
-          name: "李金梅",
-          plate_number: "浙G1G9V0",
-          phone: "18755759608",
-          remark: "",
-        },
-        {
-          serial_number: "17",
-          name: "洪坚",
-          plate_number: "浙G7N03T",
-          phone: "13858976311",
-          remark: "",
-        },
-        {
-          serial_number: "18",
-          name: "李金梅",
-          plate_number: "苏N317RA",
-          phone: "18755759608",
-          remark: "",
-        },
-        {
-          serial_number: "19",
-          name: "李淑甜",
-          plate_number: "浙GB7756",
-          phone: "13735798733",
-          remark: "",
-        },
-        {
-          serial_number: "20",
-          name: "王凯",
-          plate_number: "浙GJ8D87",
-          phone: "13735762925",
-          remark: "安全员",
-        },
-        {
-          serial_number: "21",
-          name: "李小磊",
-          plate_number: "浙G9LL60",
-          phone: "15957964282",
-          remark: "",
-        },
-        {
-          serial_number: "22",
-          name: "吴修奎",
-          plate_number: "鄂C695U2",
-          phone: "13106480568",
-          remark: "",
-        },
-        {
-          serial_number: "23",
-          name: "彭明英",
-          plate_number: "鄂C695U2",
-          phone: "13106480568",
-          remark: "",
-        },
-        {
-          serial_number: "24",
-          name: "李俊飞",
-          plate_number: "冀D935XD",
-          phone: "18630073900",
-          remark: "",
-        },
-        {
-          serial_number: "25",
-          name: "孙幸福",
-          plate_number: "皖S2W991",
-          phone: "17305013982",
-          remark: "",
-        },
-        {
-          serial_number: "26",
-          name: "陈兵",
-          plate_number: "湘DTL955",
-          phone: "15267310467",
-          remark: "",
-        },
-        {
-          serial_number: "27",
-          name: "马瑞成",
-          plate_number: "豫N644N6",
-          phone: "18086891632",
-          remark: "",
-        },
-        {
-          serial_number: "28",
-          name: "尚超伟",
-          plate_number: "豫P388P3",
-          phone: "15518497783",
-          remark: "",
-        },
-        {
-          serial_number: "29",
-          name: "杨家海",
-          plate_number: "云A59F07",
-          phone: "19557854738",
-          remark: "",
-        },
-        {
-          serial_number: "30",
-          name: "杨松",
-          plate_number: "云A66EM1",
-          phone: "15287855313",
-          remark: "",
-        },
-        {
-          serial_number: "31",
-          name: "王建",
-          plate_number: "浙G12WA2",
-          phone: "17806902150",
-          remark: "",
-        },
-        {
-          serial_number: "32",
-          name: "陈锦",
-          plate_number: "浙G13C88",
-          phone: "13586989876",
-          remark: "",
-        },
-        {
-          serial_number: "33",
-          name: "何小平",
-          plate_number: "浙G1S59H",
-          phone: "13868985941",
-          remark: "不常来",
-        },
-        {
-          serial_number: "34",
-          name: "杨义平",
-          plate_number: "浙G22DR0",
-          phone: "15958963824",
-          remark: "",
-        },
-        {
-          serial_number: "35",
-          name: "宋祖雄",
-          plate_number: "浙G2F32W",
-          phone: "13379611930",
-          remark: "不常来",
-        },
-        {
-          serial_number: "36",
-          name: "文建琼",
-          plate_number: "浙G3U33D",
-          phone: "15198821364",
-          remark: "",
-        },
-        {
-          serial_number: "37",
-          name: "杨德超",
-          plate_number: "浙G50CX7",
-          phone: "15034614696",
-          remark: "",
-        },
-        {
-          serial_number: "38",
-          name: "杨春芳",
-          plate_number: "浙G58MX3",
-          phone: "15087286721",
-          remark: "",
-        },
-        {
-          serial_number: "39",
-          name: "龚莉芳",
-          plate_number: "浙G59B19",
-          phone: "13735769663",
-          remark: "不常来",
-        },
-        {
-          serial_number: "40",
-          name: "徐文艳",
-          plate_number: "浙G5X55U",
-          phone: "15887419538",
-          remark: "",
-        },
-        {
-          serial_number: "41",
-          name: "朱林飞",
-          plate_number: "浙G5ZN02",
-          phone: "18657800467",
-          remark: "",
-        },
-        {
-          serial_number: "42",
-          name: "李支容",
-          plate_number: "浙G66VF3",
-          phone: "18457915065",
-          remark: "",
-        },
-        {
-          serial_number: "43",
-          name: "秦云龙",
-          plate_number: "浙G6E08M",
-          phone: "15808748275",
-          remark: "",
-        },
-        {
-          serial_number: "44",
-          name: "毛建强",
-          plate_number: "浙G7M225",
-          phone: "13706738284",
-          remark: "不常来",
-        },
-        {
-          serial_number: "45",
-          name: "刘华",
-          plate_number: "浙G80N87",
-          phone: "17730360370",
-          remark: "",
-        },
-        {
-          serial_number: "46",
-          name: "方文新",
-          plate_number: "浙G86XC3",
-          phone: "15325996625",
-          remark: "",
-        },
-        {
-          serial_number: "47",
-          name: "金浩",
-          plate_number: "浙G89A87",
-          phone: "15057834655",
-          remark: "",
-        },
-        {
-          serial_number: "48",
-          name: "韦云怀",
-          plate_number: "浙G8M3S1",
-          phone: "13586998418",
-          remark: "",
-        },
-        {
-          serial_number: "49",
-          name: "刘文学",
-          plate_number: "浙G8TT35",
-          phone: "15958989820",
-          remark: "不常来",
-        },
-        {
-          serial_number: "50",
-          name: "陈佳伟",
-          plate_number: "浙G90SU9",
-          phone: "17324824285",
-          remark: "",
-        },
-        {
-          serial_number: "51",
-          name: "唐如贵",
-          plate_number: "浙G9D6F1",
-          phone: "18258994505",
-          remark: "不常来",
-        },
-        {
-          serial_number: "52",
-          name: "顾留斌",
-          plate_number: "浙GBJ011",
-          phone: "19987969294",
-          remark: "",
-        },
-        {
-          serial_number: "53",
-          name: "何立周",
-          plate_number: "浙GF06608",
-          phone: "17769941928",
-          remark: "",
-        },
-        {
-          serial_number: "54",
-          name: "周昌壁",
-          plate_number: "浙GN0U95",
-          phone: "15891893613",
-          remark: "",
-        },
-        {
-          serial_number: "55",
-          name: "吴媛媛",
-          plate_number: "浙GN9L90",
-          phone: "15088209171",
-          remark: "",
-        },
-        {
-          serial_number: "56",
-          name: "鲍大侠",
-          plate_number: "浙GQ0H28",
-          phone: "15355330753",
-          remark: "",
-        },
-        {
-          serial_number: "57",
-          name: "张建忠",
-          plate_number: "浙G6L2V3",
-          phone: "18806791751",
-          remark: "",
-        },
-        {
-          serial_number: "58",
-          name: "冯晶晶",
-          plate_number: "浙GN9C54",
-          phone: "18257495944",
-          remark: "",
-        },
-        {
-          serial_number: "59",
-          name: "乔玲",
-          plate_number: "晋EP1191",
-          phone: "17635079958",
-          remark: "",
-        },
-        {
-          serial_number: "60",
-          name: "金旭丽",
-          plate_number: "浙G9P229",
-          phone: "15305794910",
-          remark: "",
-        },
-        {
-          serial_number: "61",
-          name: "艾坤",
-          plate_number: "贵CRT099",
-          phone: "15397505901",
-          remark: "",
-        },
-        {
-          serial_number: "62",
-          name: "方春男",
-          plate_number: "浙G78AN7",
-          phone: "15088206152",
-          remark: "",
-        },
-        {
-          serial_number: "63",
-          name: "杨进飞",
-          plate_number: "浙G9V67U",
-          phone: "15911478946",
-          remark: "",
-        },
-        {
-          serial_number: "64",
-          name: "肖春桃",
-          plate_number: "浙G6S09L",
-          phone: "13777925574",
-          remark: "",
-        },
-        {
-          serial_number: "65",
-          name: "吴立斌",
-          plate_number: "浙A2K21S",
-          phone: "15968676332",
-          remark: "",
-        },
-        {
-          serial_number: "66",
-          name: "马文晴",
-          plate_number: "豫BM9758",
-          phone: "19846635527",
-          remark: "",
-        },
-        {
-          serial_number: "67",
-          name: "项露怡",
-          plate_number: "浙GE9736",
-          phone: "13738524787",
-          remark: "",
-        },
-        {
-          serial_number: "68",
-          name: "廖生喜",
-          plate_number: "浙G58QS2",
-          phone: "17376288898",
-          remark: "",
-        },
-        {
-          serial_number: "69",
-          name: "赵字",
-          plate_number: "浙AF49715",
-          phone: "15056979605",
-          remark: "",
-        },
-        {
-          serial_number: "70",
-          name: "陈伟",
-          plate_number: "浙G68J03",
-          phone: "18368673665",
-          remark: "",
-        },
-        {
-          serial_number: "71",
-          name: "陈伟",
-          plate_number: "浙GR61L6",
-          phone: "18368673665",
-          remark: "",
-        },
-        {
-          serial_number: "72",
-          name: "陈伟",
-          plate_number: "浙G83YC2",
-          phone: "18368673665",
-          remark: "",
-        },
-        {
-          serial_number: "73",
-          name: "彭志高",
-          plate_number: "浙GQR925",
-          phone: "15825783992",
-          remark: "",
-        },
-        {
-          serial_number: "74",
-          name: "邹德成",
-          plate_number: "辽A9YB16",
-          phone: "13646692769",
-          remark: "司机",
-        },
-        {
-          serial_number: "75",
-          name: "方和安",
-          plate_number: "浙A6J3J3",
-          phone: "18868760609",
-          remark: "",
-        },
-        {
-          serial_number: "76",
-          name: "赵小飞",
-          plate_number: "浙G09M79",
-          phone: "18721356550",
-          remark: "",
-        },
-        {
-          serial_number: "77",
-          name: "米特",
-          plate_number: "鄂F65R65",
-          phone: "18827506138",
-          remark: "",
-        },
-        {
-          serial_number: "78",
-          name: "李忠",
-          plate_number: "鄂M1U023",
-          phone: "15271227155",
-          remark: "",
-        },
-        {
-          serial_number: "79",
-          name: "何金文",
-          plate_number: "浙G3CY01",
-          phone: "15167928177",
-          remark: "",
-        },
-        {
-          serial_number: "80",
-          name: "江辉良",
-          plate_number: "赣C56j16",
-          phone: "13340096966",
-          remark: "",
-        },
-        {
-          serial_number: "81",
-          name: "张远通",
-          plate_number: "浙GFH3006",
-          phone: "18857927110",
-          remark: "",
-        },
-        {
-          serial_number: "82",
-          name: "黄柱",
-          plate_number: "浙GU0S97",
-          phone: "13735716685",
-          remark: "云仓",
-        },
-        {
-          serial_number: "83",
-          name: "黄柱",
-          plate_number: "浙GFH8291",
-          phone: "13735716685",
-          remark: "",
-        },
-        {
-          serial_number: "84",
-          name: "徐妙娟",
-          plate_number: "浙GW2K53",
-          phone: "15067595062",
-          remark: "",
-        },
-        {
-          serial_number: "85",
-          name: "徐文豪",
-          plate_number: "浙G7TW52",
-          phone: "19883929721",
-          remark: "",
-        },
-        {
-          serial_number: "86",
-          name: "王敏君",
-          plate_number: "浙GA79652",
-          phone: "13735765587",
-          remark: "",
-        },
-        {
-          serial_number: "87",
-          name: "刘绍平",
-          plate_number: "浙G3UN79",
-          phone: "15807428087",
-          remark: "",
-        },
-        {
-          serial_number: "88",
-          name: "向昌杰",
-          plate_number: "湘N7738L",
-          phone: "17308452679",
-          remark: "",
-        },
-        {
-          serial_number: "89",
-          name: "谢磊",
-          plate_number: "皖BZ9663",
-          phone: "13818753343",
-          remark: "",
-        },
-        {
-          serial_number: "90",
-          name: "沈毅",
-          plate_number: "浙GU0D86",
-          phone: "13957964896",
-          remark: "",
-        },
-        {
-          serial_number: "91",
-          name: "屈高华",
-          plate_number: "辽B29DB5",
-          phone: "18967907118",
-          remark: "",
-        },
-        {
-          serial_number: "92",
-          name: "语阳",
-          plate_number: "浙G5A78T",
-          phone: "13479824791",
-          remark: "",
-        },
-        {
-          serial_number: "93",
-          name: "田灶",
-          plate_number: "贵A1A2Y6",
-          phone: "17684275544",
-          remark: "",
-        },
-        {
-          serial_number: "94",
-          name: "吴学涛",
-          plate_number: "浙G00NJ8",
-          phone: "17357939998",
-          remark: "牌头",
-        },
-        {
-          serial_number: "95",
-          name: "邵广辉",
-          plate_number: "苏F1J86Q",
-          phone: "17357321614",
-          remark: "牌头",
-        },
-        {
-          serial_number: "96",
-          name: "周伟霆",
-          plate_number: "浙D7M1X3",
-          phone: "17369647717",
-          remark: "牌头",
-        },
-        {
-          serial_number: "97",
-          name: "舒楠",
-          plate_number: "浙G6BG05",
-          phone: "18758909342",
-          remark: "连捷",
-        },
-        {
-          serial_number: "98",
-          name: "季俊毅",
-          plate_number: "浙G8Z83D",
-          phone: "15167934789",
-          remark: "连捷",
-        },
-        {
-          serial_number: "99",
-          name: "张安家",
-          plate_number: "浙G562XN",
-          phone: "15088289219",
-          remark: "连捷",
-        },
-        {
-          serial_number: "100",
-          name: "项连水",
-          plate_number: "浙GR38J7",
-          phone: "15067909292",
-          remark: "连捷",
-        },
-        {
-          serial_number: "101",
-          name: "余凯文",
-          plate_number: "浙G1QZ05",
-          phone: "15010359705",
-          remark: "二号楼",
-        },
-        {
-          serial_number: "102",
-          name: "刘钊",
-          plate_number: "浙G7W19X",
-          phone: "15757912232",
-          remark: "二号楼",
-        },
-        {
-          serial_number: "103",
-          name: "王健兵",
-          plate_number: "浙G2L911",
-          phone: "13586986234",
-          remark: "二号楼",
-        },
-        {
-          serial_number: "104",
-          name: "刘明",
-          plate_number: "浙G051WB",
-          phone: "18058977666",
-          remark: "二号楼",
-        },
-        {
-          serial_number: "105",
-          name: "唐梦梦",
-          plate_number: "浙FM8F61",
-          phone: "18767376330",
-          remark: "",
-        },
-        {
-          serial_number: "106",
-          name: "周晓明",
-          plate_number: "浙G8C21M",
-          phone: "18257044858",
-          remark: "",
-        },
-        {
-          serial_number: "107",
-          name: "徐旭阳",
-          plate_number: "浙GJ9T86",
-          phone: "13867961797",
-          remark: "",
-        },
-        {
-          serial_number: "108",
-          name: "吴静根",
-          plate_number: "浙AA672B",
-          phone: "13806512880",
-          remark: "",
-        },
-        {
-          serial_number: "109",
-          name: "吴灵峰",
-          plate_number: "浙AD08256",
-          phone: "13819980905",
-          remark: "",
-        },
-        {
-          serial_number: "110",
-          name: "余永钢",
-          plate_number: "浙G5QM70",
-          phone: "13566780215",
-          remark: "",
-        },
-        {
-          serial_number: "111",
-          name: "胡跃国",
-          plate_number: "浙GU7V69",
-          phone: "15925997932",
-          remark: "",
-        },
-        {
-          serial_number: "112",
-          name: "蒋学四",
-          plate_number: "浙C385KU",
-          phone: "15924731916",
-          remark: "",
-        },
-        {
-          serial_number: "113",
-          name: "李鹏程",
-          plate_number: "浙G2F655",
-          phone: "18395986145",
-          remark: "不常来",
-        },
-        {
-          serial_number: "114",
-          name: "张明虎",
-          plate_number: "云D91Z53",
-          phone: "15974679153",
-          remark: "",
-        },
-        {
-          serial_number: "115",
-          name: "李学斌",
-          plate_number: "浙G57WN8",
-          phone: "19519871256",
-          remark: "",
-        },
-        {
-          serial_number: "116",
-          name: "柳建福",
-          plate_number: "浙G5N7E0",
-          phone: "15068098089",
-          remark: "",
-        },
-        {
-          serial_number: "117",
-          name: "李立军",
-          plate_number: "浙G8YC39",
-          phone: "15087750923",
-          remark: "",
-        },
-        {
-          serial_number: "118",
-          name: "李立粉",
-          plate_number: "云CWV932",
-          phone: "18214258568",
-          remark: "",
-        },
-        {
-          serial_number: "119",
-          name: "谭梅",
-          plate_number: "浙G8Q60J",
-          phone: "19987137163",
-          remark: "",
-        },
-        {
-          serial_number: "120",
-          name: "张毕正",
-          plate_number: "云D6L223",
-          phone: "18812349200",
-          remark: "",
-        },
-        {
-          serial_number: "121",
-          name: "束天祥",
-          plate_number: "浙G61Z76",
-          phone: "15334433725",
-          remark: "",
-        },
-        {
-          serial_number: "122",
-          name: "许海勇",
-          plate_number: "湘A22ZY7",
-          phone: "17558881351",
-          remark: "",
-        },
-        {
-          serial_number: "123",
-          name: "朱绍友",
-          plate_number: "浙B1L70M",
-          phone: "19174877992",
-          remark: "",
-        },
-        {
-          serial_number: "124",
-          name: "廖芬连",
-          plate_number: "粤NVC969",
-          phone: "15271018726",
-          remark: "",
-        },
-        {
-          serial_number: "125",
-          name: "刘玉琦",
-          plate_number: "云L2K068",
-          phone: "15987631883",
-          remark: "",
-        },
-        {
-          serial_number: "126",
-          name: "舒智宏",
-          plate_number: "云D251HM",
-          phone: "15308749624",
-          remark: "",
-        },
-        {
-          serial_number: "127",
-          name: "何智伟",
-          plate_number: "渝BE561M",
-          phone: "18558765220",
-          remark: "",
-        },
-        {
-          serial_number: "128",
-          name: "王子平",
-          plate_number: "浙GY6R98",
-          phone: "13049997956",
-          remark: "",
-        },
-        {
-          serial_number: "129",
-          name: "邓生鹏",
-          plate_number: "浙GSV213",
-          phone: "18329052546",
-          remark: "",
-        },
-        {
-          serial_number: "130",
-          name: "陆胜奇",
-          plate_number: "贵HRM854",
-          phone: "19078544534",
-          remark: "",
-        },
-      ];
+      // 配置信息
+      const CONFIG = {
+        dataUrl:
+          "https://gitee.com/api/v5/repos/xiang-520/sto/contents/Employee_list/pass.json?access_token=7f8823412c1b2262f256ee292d7d6fa2",
+        currentData: [],
+      };
 
-      function search() {
-        const searchTerm = document
-          .getElementById("searchInput")
-          .value.trim()
-          .toLowerCase();
-        const results = data.filter((item) =>
-          Object.values(item).some((value) =>
-            String(value).toLowerCase().includes(searchTerm)
-          )
-        );
-
-        displayResults(results);
-      }
-
-      function displayResults(results) {
-        const container = document.getElementById("resultContainer");
-        container.innerHTML = "";
-
-        if (results.length === 0) {
-          container.innerHTML =
-            '<div style="grid-column: 1/-1; text-align: center; padding: 20px;">未找到匹配结果</div>';
-          return;
+      // Base64解码处理
+      const decodeBase64 = (base64) => {
+        try {
+          return decodeURIComponent(escape(atob(base64)));
+        } catch (error) {
+          console.error("Base64解码失败:", error);
+          return "";
         }
+      };
 
-        results.forEach((item) => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-                    <div class="card-header">${highlightMatch(item.name)}</div>
-                    <div class="card-item">车牌号：${highlightMatch(
-                      item.plate_number
-                    )}</div>
-                    <div class="card-item">电话：${highlightMatch(
-                      item.phone
-                    )}</div>
-                    ${
-                      item.remark
-                        ? `<div class="card-item">备注：${highlightMatch(
-                            item.remark
-                          )}</div>`
-                        : ""
-                    }
-                `;
-          container.appendChild(card);
-        });
-      }
+      // 数据加载器
+      const dataLoader = {
+        async load() {
+          try {
+            const response = await fetch(CONFIG.dataUrl);
+            const data = await response.json();
+            const decodedData = decodeBase64(data.content);
+            CONFIG.currentData = JSON.parse(decodedData);
+            return true;
+          } catch (error) {
+            console.error("数据加载失败:", error);
+            document.getElementById("resultContainer").innerHTML =
+              '<div class="no-results">数据加载失败，请刷新重试</div>';
+            return false;
+          }
+        },
+      };
 
-      function highlightMatch(text) {
+      // 搜索功能
+      const searchService = {
+        execute(searchTerm) {
+          return CONFIG.currentData.filter((item) =>
+            Object.values(item).some((value) =>
+              String(value).toLowerCase().includes(searchTerm)
+            )
+          );
+        },
+      };
+
+      // 结果渲染器
+      const resultRenderer = {
+        update(results) {
+          const container = document.getElementById("resultContainer");
+          container.innerHTML = "";
+
+          if (!results || results.length === 0) {
+            container.innerHTML =
+              '<div class="no-results">未找到匹配结果</div>';
+            return;
+          }
+
+          results.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                      <div class="card-header">${this.highlight(
+                        item.name
+                      )}</div>
+                      <div class="card-item">车牌号：${this.highlight(
+                        item.plate_number
+                      )}</div>
+                      <div class="card-item">电话：${this.highlight(
+                        item.phone
+                      )}</div>
+                      ${
+                        item.remark
+                          ? `<div class="card-item">备注：${this.highlight(
+                              item.remark
+                            )}</div>`
+                          : ""
+                      }
+                  `;
+            container.appendChild(card);
+          });
+        },
+
+        highlight(text) {
+          const searchTerm = document
+            .getElementById("searchInput")
+            .value.trim()
+            .toLowerCase();
+          if (!searchTerm || !text) return text || "";
+          const regex = new RegExp(`(${searchTerm})`, "gi");
+          return String(text).replace(
+            regex,
+            '<span class="highlight">$1</span>'
+          );
+        },
+      };
+
+      // 事件处理
+      function handleSearch() {
         const searchTerm = document
           .getElementById("searchInput")
           .value.trim()
           .toLowerCase();
-        if (!searchTerm) return text;
-        const regex = new RegExp(`(${searchTerm})`, "gi");
-        return text.replace(regex, '<span class="highlight">$1</span>');
+        const results = searchService.execute(searchTerm);
+        resultRenderer.update(results);
       }
 
-      // 初始化显示全部数据
-      window.onload = () => {
+      // 初始化
+      window.addEventListener("load", async () => {
+        // 绑定回车事件
         document
           .getElementById("searchInput")
           .addEventListener("keyup", (e) => {
-            if (e.key === "Enter") search();
+            if (e.key === "Enter") handleSearch();
           });
-        displayResults(data);
-      };
+
+        // 加载并显示数据
+        if (await dataLoader.load()) {
+          resultRenderer.update(CONFIG.currentData);
+        }
+      });
     </script>
   </body>
 </html>
