@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover"
     />
     <title>⚡ 王者战区 · 天蓝色英雄图鉴 ⚡</title>
     <style>
@@ -30,20 +30,20 @@
           -apple-system,
           "Roboto",
           sans-serif;
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1rem;
         color: #1a2c3e;
         position: relative;
         min-height: 100vh;
       }
 
-      /* 科技感装饰元素（闪电、波浪） */
+      /* 科技感装饰元素 */
       body::before {
         content: "⚡🌊🔧⚙️";
-        font-size: 80px;
+        font-size: 70px;
         position: fixed;
-        bottom: 15px;
-        right: 15px;
-        opacity: 0.15;
+        bottom: 10px;
+        right: 10px;
+        opacity: 0.12;
         pointer-events: none;
         z-index: 0;
         white-space: pre;
@@ -52,11 +52,11 @@
 
       body::after {
         content: "🎯🏆💠";
-        font-size: 70px;
+        font-size: 60px;
         position: fixed;
-        top: 20px;
-        left: 15px;
-        opacity: 0.12;
+        top: 15px;
+        left: 10px;
+        opacity: 0.1;
         pointer-events: none;
         z-index: 0;
         animation: slowRotate 30s infinite linear;
@@ -65,11 +65,11 @@
       @keyframes floatMove {
         0% {
           transform: translateY(0px) rotate(0deg);
-          opacity: 0.1;
+          opacity: 0.08;
         }
         100% {
-          transform: translateY(-25px) rotate(6deg);
-          opacity: 0.25;
+          transform: translateY(-20px) rotate(5deg);
+          opacity: 0.2;
         }
       }
       @keyframes slowRotate {
@@ -88,19 +88,43 @@
         z-index: 2;
       }
 
-      /* 头部 */
+      /* 头部 — 新增QQ头像区域支持 */
       .header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         background: rgba(255, 255, 255, 0.75);
         backdrop-filter: blur(12px);
-        border-radius: 60px;
-        padding: 1rem 1.5rem;
-        box-shadow: 0 8px 20px rgba(0, 40, 80, 0.15);
+        border-radius: 50px;
+        padding: 0.8rem 1rem;
+        box-shadow: 0 6px 16px rgba(0, 40, 80, 0.12);
         border: 1px solid rgba(70, 130, 200, 0.4);
       }
-      .header h1 {
-        font-size: 2.2rem;
+      /* 标题行: 头像 + 文字 弹性居中 */
+      .title-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      /* QQ 头像样式 */
+      .qq-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        background: #ffffffcc;
+        transition: transform 0.2s;
+      }
+      .qq-avatar:hover {
+        transform: scale(1.02);
+      }
+      /* 标题文字渐变保留原风格 */
+      .hero-main-title {
+        font-size: 1.7rem;
+        font-weight: 800;
         background: linear-gradient(135deg, #0f4c81, #2a6f9c, #4ca1e0);
         background-clip: text;
         -webkit-background-clip: text;
@@ -108,18 +132,41 @@
         letter-spacing: 1px;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        font-weight: 700;
+        gap: 6px;
       }
       .header p {
         color: #2c5a7a;
-        margin-top: 0.5rem;
+        margin-top: 0.4rem;
         font-weight: 500;
+        font-size: 0.75rem;
         background: #eef6ffcc;
         display: inline-block;
-        padding: 0.2rem 1.2rem;
+        padding: 0.2rem 1rem;
         border-radius: 40px;
         backdrop-filter: blur(4px);
+      }
+
+      /* 手机端标题字号和头像适配 */
+      @media (max-width: 580px) {
+        .hero-main-title {
+          font-size: 1.2rem;
+        }
+        .qq-avatar {
+          width: 36px;
+          height: 36px;
+        }
+        .title-row {
+          gap: 6px;
+        }
+      }
+      @media (max-width: 420px) {
+        .hero-main-title {
+          font-size: 1rem;
+        }
+        .qq-avatar {
+          width: 32px;
+          height: 32px;
+        }
       }
 
       /* 控制栏 */
@@ -127,63 +174,63 @@
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(12px);
         border-radius: 48px;
-        padding: 0.6rem 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 5px 18px rgba(0, 20, 40, 0.1);
+        padding: 0.5rem 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 14px rgba(0, 20, 40, 0.08);
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
+        gap: 0.8rem;
         border: 1px solid #bbd4ff;
       }
 
       .filter-buttons {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.6rem;
+        gap: 0.5rem;
         align-items: center;
       }
       .filter-btn {
         background: #eef3fc;
         border: none;
-        padding: 0.4rem 1.2rem;
+        padding: 0.35rem 1rem;
         border-radius: 40px;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         font-weight: 600;
         color: #1d5b8e;
         cursor: pointer;
         transition: 0.2s;
         font-family: inherit;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        white-space: nowrap;
       }
       .filter-btn:hover {
         background: #cde3fe;
         transform: translateY(-2px);
-        color: #0a3f62;
       }
       .filter-btn.active {
         background: linear-gradient(105deg, #2a7faa, #1e5f8e);
         color: white;
-        box-shadow: 0 5px 12px rgba(30, 95, 142, 0.35);
+        box-shadow: 0 5px 10px rgba(30, 95, 142, 0.3);
       }
       .search-box {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.4rem;
         align-items: center;
         background: white;
         border-radius: 60px;
-        padding: 0.15rem 0.15rem 0.15rem 1.2rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 0.1rem 0.1rem 0.1rem 1rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         border: 1px solid #bfd9ff;
       }
       .search-box input {
         border: none;
         background: transparent;
-        padding: 0.6rem 0;
-        font-size: 0.9rem;
+        padding: 0.5rem 0;
+        font-size: 0.85rem;
         outline: none;
-        width: 170px;
+        width: 140px;
         font-family: inherit;
         color: #1c4e70;
       }
@@ -191,9 +238,10 @@
         background: #2f7fb5;
         border: none;
         border-radius: 60px;
-        padding: 0.45rem 1.1rem;
+        padding: 0.4rem 1rem;
         color: white;
         font-weight: 600;
+        font-size: 0.7rem;
         cursor: pointer;
         transition: 0.2s;
       }
@@ -206,37 +254,65 @@
       }
 
       .stats {
-        margin: 0 0 1.2rem 0;
-        font-size: 0.9rem;
+        margin: 0 0 1rem 0;
+        font-size: 0.8rem;
         font-weight: 500;
         color: #1e557b;
         background: #ffffffc9;
         display: inline-block;
-        padding: 0.3rem 1.2rem;
+        padding: 0.2rem 1rem;
         border-radius: 40px;
         backdrop-filter: blur(4px);
       }
 
-      /* 卡片网格 - 蓝白硬朗风格 */
+      /* 卡片网格 —— 移动优先优化：一排4~5个 */
       .hero-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-        gap: 1.6rem;
+        grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+        gap: 1rem;
+      }
+
+      /* 平板/大屏手机适当宽松 */
+      @media (min-width: 480px) and (max-width: 640px) {
+        .hero-grid {
+          grid-template-columns: repeat(5, minmax(75px, 1fr));
+          gap: 0.9rem;
+        }
+      }
+      /* 常规手机 (≤480px) 一排4个，更紧凑但清晰 */
+      @media (max-width: 479px) {
+        .hero-grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.7rem;
+        }
+      }
+      /* 小折叠屏或极端小屏(≤370px)依然保持四列，但缩小内边距 */
+      @media (max-width: 374px) {
+        .hero-grid {
+          gap: 0.6rem;
+        }
+      }
+      /* 大平板及以上原本的自动填充会维持舒适宽度 */
+      @media (min-width: 800px) {
+        .hero-grid {
+          grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+          gap: 1.4rem;
+        }
       }
 
       .hero-card {
         background: rgba(255, 255, 255, 0.96);
         backdrop-filter: blur(2px);
-        border-radius: 1.5rem;
+        border-radius: 1.2rem;
         overflow: hidden;
-        transition: all 0.25s ease;
-        box-shadow: 0 10px 20px rgba(0, 20, 40, 0.12);
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 12px rgba(0, 20, 40, 0.1);
         cursor: pointer;
         border: 1px solid #cae0f5;
       }
       .hero-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 30px rgba(0, 62, 102, 0.25);
+        transform: translateY(-4px);
+        box-shadow: 0 14px 24px rgba(0, 62, 102, 0.2);
         border-color: #6ea8dc;
       }
       .card-img {
@@ -244,40 +320,58 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 1rem 0.5rem 0.8rem;
+        padding: 0.6rem 0.2rem 0.2rem;
         border-bottom: 2px solid #c2dbff;
       }
       .card-img img {
         width: 100%;
-        max-width: 135px;
+        max-width: 100px;
         height: auto;
         aspect-ratio: 1 / 1;
         object-fit: contain;
-        filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.1));
+        filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.08));
+        transition: transform 0.1s;
+      }
+      /* 手机端进一步缩小图片区域 */
+      @media (max-width: 640px) {
+        .card-img {
+          padding: 0.4rem 0.2rem 0rem;
+        }
+        .card-img img {
+          max-width: 70px;
+        }
+      }
+      @media (max-width: 479px) {
+        .card-img img {
+          max-width: 62px;
+        }
       }
       .card-info {
-        padding: 0.9rem 0.8rem 1.2rem;
+        padding: 0.5rem 0.3rem 0.7rem;
         text-align: center;
       }
       .hero-name {
-        font-size: 1.2rem;
+        font-size: 0.85rem;
         font-weight: 800;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.25rem;
         background: linear-gradient(120deg, #1e4b6e, #2f7ba9);
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
       }
       .hero-tags {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.4rem;
+        gap: 0.3rem;
       }
       .tag {
-        font-size: 0.68rem;
+        font-size: 0.6rem;
         font-weight: 600;
-        padding: 0.2rem 0.7rem;
+        padding: 0.15rem 0.5rem;
         border-radius: 24px;
         background: #e9f0f9;
         color: #2a6e96;
@@ -289,6 +383,23 @@
       .tag.secondary {
         background: #e9f1fe;
         color: #427eac;
+      }
+
+      /* 移动端文本微调 */
+      @media (max-width: 480px) {
+        .hero-name {
+          font-size: 0.7rem;
+          white-space: normal;
+          word-break: keep-all;
+          line-height: 1.2;
+        }
+        .tag {
+          font-size: 0.55rem;
+          padding: 0.1rem 0.4rem;
+        }
+        .card-info {
+          padding: 0.4rem 0.2rem 0.5rem;
+        }
       }
 
       .loading-spinner,
@@ -303,14 +414,14 @@
         color: #1a577b;
       }
 
-      /* 弹窗天蓝色风格 */
+      /* 弹窗天蓝色风格 — 移动端适配优化 */
       .modal-mask {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(10, 40, 60, 0.7);
+        background-color: rgba(10, 40, 60, 0.75);
         backdrop-filter: blur(8px);
         display: flex;
         align-items: center;
@@ -328,7 +439,7 @@
       }
       .modal-container {
         background: #f5faff;
-        border-radius: 2rem;
+        border-radius: 1.6rem;
         max-width: 880px;
         width: 92%;
         max-height: 85vh;
@@ -351,25 +462,25 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 1.8rem;
+        padding: 0.8rem 1.2rem;
         background: #e2f0ff;
-        border-radius: 2rem 2rem 0 0;
+        border-radius: 1.6rem 1.6rem 0 0;
         border-bottom: 2px solid #bdd9fc;
         position: sticky;
         top: 0;
         z-index: 10;
       }
       .modal-header h3 {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: #1c6a9b;
       }
       .modal-close {
         background: #deecfc;
         border: none;
-        font-size: 1.8rem;
-        width: 38px;
-        height: 38px;
+        font-size: 1.6rem;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
         cursor: pointer;
         color: #2d709b;
@@ -381,40 +492,38 @@
         transform: rotate(90deg);
       }
       .modal-content {
-        padding: 1rem 1.5rem 1.8rem;
+        padding: 0.8rem 1rem 1.4rem;
       }
       .hero-basic {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+        gap: 0.8rem;
+        margin-bottom: 1.2rem;
         background: #ffffffdb;
-        border-radius: 1.5rem;
-        padding: 0.7rem 1.2rem;
+        border-radius: 1.2rem;
+        padding: 0.5rem 1rem;
         border: 1px solid #cde3fc;
       }
       .hero-basic img {
-        width: 68px;
-        height: 68px;
+        width: 55px;
+        height: 55px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #4895d6;
       }
-
-      /* 两个导航栏（QQ / 微信） */
       .tabs-container {
         display: flex;
-        gap: 1rem;
-        margin-bottom: 1.2rem;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
         border-bottom: 2px solid #c2d9f0;
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.4rem;
       }
       .tab-btn {
         background: #eaf2fc;
         border: none;
-        padding: 0.4rem 1.8rem;
+        padding: 0.35rem 1.2rem;
         border-radius: 40px;
-        font-size: 1rem;
+        font-size: 0.85rem;
         font-weight: 600;
         color: #1f6797;
         cursor: pointer;
@@ -446,35 +555,35 @@
       .platform-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        gap: 0.9rem;
         margin-bottom: 0.5rem;
       }
       .platform-card {
         background: #ffffff;
-        border-radius: 1.2rem;
-        padding: 0.8rem;
+        border-radius: 1rem;
+        padding: 0.7rem;
         border: 1px solid #d2e5ff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
       }
       .platform-name {
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 0.85rem;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         color: #2a6b96;
-        margin-bottom: 10px;
-        border-left: 4px solid #4791cf;
-        padding-left: 10px;
+        margin-bottom: 8px;
+        border-left: 3px solid #4791cf;
+        padding-left: 8px;
       }
       .detail-row {
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 6px;
-        font-size: 0.78rem;
+        margin-bottom: 5px;
+        font-size: 0.7rem;
       }
       .detail-label {
-        width: 78px;
+        width: 70px;
         font-weight: 600;
         color: #3f7ba3;
       }
@@ -489,33 +598,38 @@
       .error-tip {
         background: #f0f7ff;
         border-radius: 1rem;
-        padding: 0.6rem;
+        padding: 0.5rem;
         text-align: center;
         color: #c7432b;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
       }
       @media (max-width: 640px) {
         .platform-row {
           grid-template-columns: 1fr;
-          gap: 0.8rem;
+          gap: 0.7rem;
         }
-        .hero-grid {
-          gap: 1rem;
+        .modal-header h3 {
+          font-size: 1rem;
         }
-        .filter-btn {
-          padding: 0.3rem 0.8rem;
+        .hero-basic img {
+          width: 48px;
+          height: 48px;
+        }
+        .tab-btn {
+          padding: 0.3rem 1rem;
+          font-size: 0.75rem;
         }
       }
       footer {
         text-align: center;
-        margin-top: 2.5rem;
-        font-size: 0.7rem;
+        margin-top: 2rem;
+        font-size: 0.65rem;
         color: #2573a7;
         background: rgba(255, 255, 250, 0.7);
         width: fit-content;
         margin-left: auto;
         margin-right: auto;
-        padding: 0.3rem 1.8rem;
+        padding: 0.2rem 1.2rem;
         border-radius: 60px;
         backdrop-filter: blur(4px);
       }
@@ -524,7 +638,19 @@
   <body>
     <div class="app-container">
       <div class="header">
-        <h1>🌀 王者战区 · 天蓝物语 🌀</h1>
+        <!-- 标题区域: 左侧为动态QQ头像 + 文字 -->
+        <div class="title-row">
+          <img
+            id="dynamicQQAvatar"
+            class="qq-avatar"
+            src="https://q1.qlogo.cn/g?b=qq&nk=10000&s=100"
+            alt="QQ头像"
+            onerror="
+              this.src = 'https://cdn-icons-png.flaticon.com/512/145/145812.png'
+            "
+          />
+          <span class="hero-main-title">🌀 王者战区 · 天蓝物语 🌀</span>
+        </div>
         <p>⚡ 点击英雄卡片 | 双区战力对比 · QQ / 微信 自由切换 ⚡</p>
       </div>
 
@@ -534,7 +660,7 @@
           <input
             type="text"
             id="searchInput"
-            placeholder="🔍 英雄名 / 如: 李白"
+            placeholder="🔍 英雄名"
             autocomplete="off"
           />
           <button id="searchBtn">搜 索</button>
@@ -543,13 +669,18 @@
       </div>
       <div class="stats" id="statsArea">🌊 加载英雄数据中 🌊</div>
       <div id="heroGridContainer" class="hero-grid">
-        <div class="loading-spinner">⚡ 召唤英雄，请稍候... ⚡</div>
+        <div class="loading-spinner">⚡ 英雄集结中，请稍候 ⚡</div>
       </div>
       <footer>✨ 主备接口双重保障 | 战力数据仅作参考 ✨</footer>
     </div>
 
     <script>
-      // ---------- 天蓝色风格 功能完整 ----------
+      // ---------- 【可配置项】请将下面的QQ号替换为您自己的QQ号，即可显示您的QQ头像 ----------
+      const MY_QQ_NUMBER = "2860364991"; // ⚠️ 请将此处的数字改为你自己的QQ号，例如 "123456789"
+      // 说明: 系统会自动调用腾讯QQ官方API展示头像，https://q1.qlogo.cn/g?b=qq&nk=你的QQ号&s=100
+      // 如果QQ号未修改或头像加载失败，会显示默认的企鹅占位图。
+      // -------------------------------------------------------------------------
+
       const CLASS_MAP = {
         1: "战士",
         2: "法师",
@@ -568,7 +699,6 @@
         { id: 6, name: "💚 辅助" },
       ];
 
-      // 分组：QQ区 / 微信区 (默认显示QQ区)
       const TAB_GROUPS = [
         {
           name: "📱 QQ 区",
@@ -588,10 +718,8 @@
         },
       ];
 
-      // 英雄列表接口 (主+备用)
       const HERO_LIST_MAIN = "https://www.sapi.run/hero/getHeroList.php";
       const HERO_LIST_BACKUP = "https://api.xxoo.team/hero/getHeroList.php";
-      // 战力查询接口
       const POWER_MAIN = "https://www.sapi.run/hero/select.php";
       const POWER_BACKUP = "https://api.xxoo.team/hero/getHeroInfo.php";
 
@@ -599,15 +727,36 @@
       let currentFilterType = 0;
       let currentSearchKeyword = "";
       let currentModal = null;
-      let activeTabKey = "qq"; // 当前导航: qq / wx
+      let activeTabKey = "qq";
 
-      // DOM
       const filterContainer = document.getElementById("filterButtons");
       const heroGridDiv = document.getElementById("heroGridContainer");
       const statsArea = document.getElementById("statsArea");
       const searchInput = document.getElementById("searchInput");
       const searchBtn = document.getElementById("searchBtn");
       const clearSearchBtn = document.getElementById("clearSearchBtn");
+      const qqAvatarImg = document.getElementById("dynamicQQAvatar");
+
+      // 配置QQ头像: 利用QQ官方API，如果用户修改了 MY_QQ_NUMBER 则显示真实头像
+      function applyQQAvatar() {
+        let qq = MY_QQ_NUMBER.trim();
+        if (!qq || qq === "10000" || qq === "你的QQ号") {
+          // 提示用户修改，但依然显示默认的企鹅风格占位图
+          qqAvatarImg.src =
+            "https://cdn-icons-png.flaticon.com/512/145/145812.png";
+          qqAvatarImg.alt = "QQ头像(待设置)";
+          console.log(
+            "💡 提示: 请修改代码开头的 MY_QQ_NUMBER 变量为你的真实QQ号，即可显示个人头像",
+          );
+        } else {
+          // 使用腾讯QQ头像API: s=100 表示100x100大小
+          qqAvatarImg.src = `https://q1.qlogo.cn/g?b=qq&nk=${qq}&s=100`;
+          qqAvatarImg.onerror = function () {
+            // 如果QQ号无效或无法拉取，则回退到默认头像
+            this.src = "https://cdn-icons-png.flaticon.com/512/145/145812.png";
+          };
+        }
+      }
 
       function escapeHtml(str) {
         if (!str) return "";
@@ -622,9 +771,8 @@
       function getHeroTypeText(hero) {
         const mainText = CLASS_MAP[hero.hero_type] || `未知(${hero.hero_type})`;
         let subText = null;
-        if (hero.hero_type2 && hero.hero_type2 !== hero.hero_type) {
+        if (hero.hero_type2 && hero.hero_type2 !== hero.hero_type)
           subText = CLASS_MAP[hero.hero_type2];
-        }
         return { primary: mainText, secondary: subText, hasSecond: !!subText };
       }
 
@@ -632,6 +780,7 @@
         if (typeId === 0) return true;
         return hero.hero_type === typeId || hero.hero_type2 === typeId;
       }
+
       function filterHeroes() {
         let filtered = [...allHeroes];
         if (currentFilterType !== 0)
@@ -662,11 +811,11 @@
             iconUrl ||
             "https://game.gtimg.cn/images/yxzj/img201606/heroimg/0/default.jpg";
           html += `
-                <div class="hero-card" data-hero-name="${escapeHtml(heroName)}">
-                    <div class="card-img"><img src="${imgSrc}" alt="${heroName}" loading="lazy" onerror="this.src='https://game.gtimg.cn/images/yxzj/img201606/heroimg/0/default.jpg'"></div>
-                    <div class="card-info"><div class="hero-name">${escapeHtml(heroName)}</div><div class="hero-tags">${tagsHtml}</div></div>
-                </div>
-            `;
+        <div class="hero-card" data-hero-name="${escapeHtml(heroName)}">
+          <div class="card-img"><img src="${imgSrc}" alt="${heroName}" loading="lazy" onerror="this.src='https://game.gtimg.cn/images/yxzj/img201606/heroimg/0/default.jpg'"></div>
+          <div class="card-info"><div class="hero-name">${escapeHtml(heroName)}</div><div class="hero-tags">${tagsHtml}</div></div>
+        </div>
+      `;
         }
         heroGridDiv.innerHTML = html;
         document.querySelectorAll(".hero-card").forEach((card) => {
@@ -687,11 +836,11 @@
           statsArea.innerHTML = `⚡ 共 ${total} 位英雄 · 点击卡片查看双区战力 ⚡`;
         else {
           let filterText =
-            currentFilterType !== 0
-              ? CATEGORIES.find((c) => c.id === currentFilterType)
-                  ?.name.replace(/[✨⚔️🔮🛡️🗡️🏹💚]/g, "")
-                  .trim() || `职业${currentFilterType}`
-              : "";
+            (currentFilterType !== 0 &&
+              CATEGORIES.find((c) => c.id === currentFilterType)
+                ?.name.replace(/[✨⚔️🔮🛡️🗡️🏹💚]/g, "")
+                .trim()) ||
+            "筛选";
           if (currentSearchKeyword.trim())
             statsArea.innerHTML = `🔍 搜索到 ${cnt} / ${total} 位英雄 · 关键词: ${escapeHtml(currentSearchKeyword)}`;
           else statsArea.innerHTML = `🏷️ ${filterText} · ${cnt} 位英雄`;
@@ -707,7 +856,6 @@
         });
       }
 
-      // 战力查询双接口降级
       async function fetchPowerWithFallback(heroName, platformCode) {
         const mainUrl = `${POWER_MAIN}?hero=${encodeURIComponent(heroName)}&type=${platformCode}`;
         const backupUrl = `${POWER_BACKUP}?hero=${encodeURIComponent(heroName)}&type=${platformCode}`;
@@ -774,22 +922,21 @@
           if (res && res.success && res.data) {
             const d = res.data;
             contentHtml = `
-                    <div class="detail-row"><div class="detail-label">🌏 国服最强</div><div class="detail-value"><span class="power-number">${d.guobiao ? Number(d.guobiao).toLocaleString() : "--"}</span></div></div>
-                    <div class="detail-row"><div class="detail-label">🏅 省标最低</div><div class="detail-value">${escapeHtml(d.province || "--")} · <span class="power-number">${d.provincePower ? Number(d.provincePower).toLocaleString() : "--"}</span></div></div>
-                    <div class="detail-row"><div class="detail-label">🥈 市标最低</div><div class="detail-value">${escapeHtml(d.city || "--")} · <span class="power-number">${d.cityPower ? Number(d.cityPower).toLocaleString() : "--"}</span></div></div>
-                    <div class="detail-row"><div class="detail-label">🥉 区标最低</div><div class="detail-value">${escapeHtml(d.area || "--")} · <span class="power-number">${d.areaPower ? Number(d.areaPower).toLocaleString() : "--"}</span></div></div>
-                    <div class="detail-row"><div class="detail-label">⏱️ 更新时间</div><div class="detail-value">${escapeHtml(d.updatetime || "未知")}</div></div>
-                    
-                `;
+          <div class="detail-row"><div class="detail-label">🌏 国服最强</div><div class="detail-value"><span class="power-number">${d.guobiao ? Number(d.guobiao).toLocaleString() : "--"}</span></div></div>
+          <div class="detail-row"><div class="detail-label">🏅 省标最低</div><div class="detail-value">${escapeHtml(d.province || "--")} · <span class="power-number">${d.provincePower ? Number(d.provincePower).toLocaleString() : "--"}</span></div></div>
+          <div class="detail-row"><div class="detail-label">🥈 市标最低</div><div class="detail-value">${escapeHtml(d.city || "--")} · <span class="power-number">${d.cityPower ? Number(d.cityPower).toLocaleString() : "--"}</span></div></div>
+          <div class="detail-row"><div class="detail-label">🥉 区标最低</div><div class="detail-value">${escapeHtml(d.area || "--")} · <span class="power-number">${d.areaPower ? Number(d.areaPower).toLocaleString() : "--"}</span></div></div>
+          <div class="detail-row"><div class="detail-label">⏱️ 更新时间</div><div class="detail-value">${escapeHtml(d.updatetime || "未知")}</div></div>
+        `;
           } else {
             contentHtml = `<div class="error-tip">❌ ${res?.error || "无法获取战力数据"}</div>`;
           }
           platformsHtml += `
-                <div class="platform-card">
-                    <div class="platform-name"><span>${pf.icon}</span> ${pf.label}</div>
-                    <div>${contentHtml}</div>
-                </div>
-            `;
+        <div class="platform-card">
+          <div class="platform-name"><span>${pf.icon}</span> ${pf.label}</div>
+          <div>${contentHtml}</div>
+        </div>
+      `;
         }
         return `<div class="platform-group active-group"><div class="platform-row">${platformsHtml}</div></div>`;
       }
@@ -801,27 +948,25 @@
         if (heroBasic && heroBasic.iconUrl)
           avatarHtml = `<img src="${heroBasic.iconUrl}" alt="${heroName}" onerror="this.src='https://game.gtimg.cn/images/yxzj/img201606/heroimg/0/default.jpg'">`;
         else
-          avatarHtml = `<div style="width:68px;height:68px;background:#cfe3ff;border-radius:50%;display:flex;align-items:center;justify-content:center;">⚔️</div>`;
+          avatarHtml = `<div style="width:55px;height:55px;background:#cfe3ff;border-radius:50%;display:flex;align-items:center;justify-content:center;">⚔️</div>`;
 
         const modalDiv = document.createElement("div");
         modalDiv.className = "modal-mask";
         modalDiv.innerHTML = `
-            <div class="modal-container">
-                <div class="modal-header">
-                    <h3>📊 ${escapeHtml(heroName)} · 双区战力评级 📊</h3>
-                    <button class="modal-close">✖</button>
-                </div>
-                <div class="modal-content" id="modalDynamicContent">
-                    <div class="hero-basic">${avatarHtml}<div><h4>🌀 ${escapeHtml(heroName)} 🌀</h4><span style="font-size:0.7rem;">QQ区 / 微信区 战力对比</span></div></div>
-                    <div class="tabs-container" id="tabContainer"></div>
-                    <div id="groupContentArea">⏳ 加载战力数据中...</div>
-                </div>
-            </div>
-        `;
+      <div class="modal-container">
+        <div class="modal-header"><h3>📊 ${escapeHtml(heroName)} · 双区战力 📊</h3><button class="modal-close">✖</button></div>
+        <div class="modal-content" id="modalDynamicContent">
+          <div class="hero-basic">${avatarHtml}<div><h4>🌀 ${escapeHtml(heroName)} 🌀</h4><span style="font-size:0.7rem;">QQ区 / 微信区 战力对比</span></div></div>
+          <div class="tabs-container" id="tabContainer"></div>
+          <div id="groupContentArea">⏳ 加载战力数据中...</div>
+        </div>
+      </div>
+    `;
         document.body.appendChild(modalDiv);
         currentModal = modalDiv;
-        const closeBtn = modalDiv.querySelector(".modal-close");
-        closeBtn.addEventListener("click", () => closeModal());
+        modalDiv
+          .querySelector(".modal-close")
+          .addEventListener("click", () => closeModal());
         modalDiv.addEventListener("click", (e) => {
           if (e.target === modalDiv) closeModal();
         });
@@ -829,11 +974,9 @@
         const tabContainer = modalDiv.querySelector("#tabContainer");
         const groupArea = modalDiv.querySelector("#groupContentArea");
 
-        const qqGroup = TAB_GROUPS[0];
-        const wxGroup = TAB_GROUPS[1];
         const [qqPowerMap, wxPowerMap] = await Promise.all([
-          loadGroupPower(heroName, qqGroup.platforms),
-          loadGroupPower(heroName, wxGroup.platforms),
+          loadGroupPower(heroName, TAB_GROUPS[0].platforms),
+          loadGroupPower(heroName, TAB_GROUPS[1].platforms),
         ]);
 
         function buildTabs() {
@@ -844,12 +987,11 @@
             btn.textContent = group.name;
             btn.addEventListener("click", () => {
               activeTabKey = group.key;
-              const freshHtml = renderModalByTab(
+              groupArea.innerHTML = renderModalByTab(
                 heroName,
                 qqPowerMap,
                 wxPowerMap,
               );
-              groupArea.innerHTML = freshHtml;
               document
                 .querySelectorAll(".tab-btn")
                 .forEach((bt) => bt.classList.remove("active"));
@@ -859,7 +1001,6 @@
           });
         }
         buildTabs();
-        // 默认显示QQ区
         groupArea.innerHTML = renderModalByTab(
           heroName,
           qqPowerMap,
@@ -874,7 +1015,6 @@
         }
       }
 
-      // 英雄列表获取（主备）
       async function fetchHeroListWithFallback() {
         const fetchWithTimeout = (url, timeout = 8000) => {
           const controller = new AbortController();
@@ -905,21 +1045,15 @@
           if (heroesArr && heroesArr.length) return heroesArr;
           throw new Error("主接口无数据");
         } catch (err) {
-          console.warn("主英雄接口失败，使用备用", err);
-          try {
-            let backupResp = await fetchWithTimeout(HERO_LIST_BACKUP);
-            if (!backupResp.ok)
-              throw new Error(`备用接口 ${backupResp.status}`);
-            let backupJson = await backupResp.json();
-            let backupArr = null;
-            if (Array.isArray(backupJson)) backupArr = backupJson;
-            else if (backupJson && Array.isArray(backupJson.data))
-              backupArr = backupJson.data;
-            if (backupArr && backupArr.length) return backupArr;
-            throw new Error("备用接口无英雄列表");
-          } catch (finalErr) {
-            throw new Error(`英雄列表全部失败: ${finalErr.message}`);
-          }
+          let backupResp = await fetchWithTimeout(HERO_LIST_BACKUP);
+          if (!backupResp.ok) throw new Error(`备用接口 ${backupResp.status}`);
+          let backupJson = await backupResp.json();
+          let backupArr = null;
+          if (Array.isArray(backupJson)) backupArr = backupJson;
+          else if (backupJson && Array.isArray(backupJson.data))
+            backupArr = backupJson.data;
+          if (backupArr && backupArr.length) return backupArr;
+          throw new Error("英雄列表全部失败");
         }
       }
 
@@ -951,18 +1085,16 @@
           if (allHeroes.length === 0) throw new Error("无有效职业英雄");
           refreshDisplay();
         } catch (err) {
-          console.error(err);
-          heroGridDiv.innerHTML = `<div class="error-message">🌊 英雄列表加载失败: ${escapeHtml(err.message)}<br>请尝试刷新或检查网络 🌊</div>`;
+          heroGridDiv.innerHTML = `<div class="error-message">🌊 英雄列表加载失败: ${escapeHtml(err.message)}<br>请尝试刷新 🌊</div>`;
           statsArea.innerHTML = "❌ 无法获取英雄数据";
         }
       }
 
       function buildFilterButtons() {
         filterContainer.innerHTML = "";
-        for (let cat of CATEGORIES) {
+        CATEGORIES.forEach((cat) => {
           const btn = document.createElement("button");
-          btn.className = "filter-btn";
-          if (cat.id === currentFilterType) btn.classList.add("active");
+          btn.className = `filter-btn ${cat.id === currentFilterType ? "active" : ""}`;
           btn.setAttribute("data-type", cat.id);
           btn.textContent = cat.name;
           btn.addEventListener("click", () => {
@@ -970,7 +1102,7 @@
             refreshDisplay();
           });
           filterContainer.appendChild(btn);
-        }
+        });
       }
 
       function resetSearch() {
@@ -993,6 +1125,7 @@
       function init() {
         buildFilterButtons();
         bindEvents();
+        applyQQAvatar(); // 设置QQ头像（根据my_qq）
         loadAllHeroes();
       }
       init();
