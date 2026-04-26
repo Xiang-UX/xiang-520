@@ -1,23 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
   <head>
     <meta charset="UTF-8" />
-    <title>时钟罗盘</title>
+    <title>寻龙分金·天星罗盘</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
+ <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
     <style>
       * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
+        user-select: none;
       }
+
       body {
         font-size: 14px;
-        background: black;
-        color: gainsboro;
+        background: #03050a;
+        color: #e6e9f0;
+        min-height: 100vh;
+        overflow: hidden;
+        font-family:
+          "Segoe UI",
+          "Poppins",
+          "Microsoft YaHei",
+          system-ui,
+          -apple-system,
+          "Inter",
+          monospace;
+        position: relative;
       }
+
+      /* 星空画布 - 真实星辰背景 */
+      #starsCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 0;
+        background: radial-gradient(ellipse at 40% 50%, #0a0e1a, #020408);
+      }
+
+      /* 主时钟容器 */
+      .clock-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      /* 原始时钟结构 - 完全保留原有布局逻辑 */
       .center {
         position: absolute;
         top: 50%;
@@ -25,74 +64,378 @@
         transform: translate(-50%, -50%);
         width: 18px;
         height: 18px;
+        pointer-events: none;
+        z-index: 12;
       }
+
       .center > div {
         transform-origin: left center;
-        /* display: none; */
         position: absolute;
         height: 18px;
-        transition: 0.5s transform;
-        text-shadow: 0 0 20px orange;
+        transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        filter: drop-shadow(0 0 6px rgba(255, 160, 50, 0.4));
+        pointer-events: none;
       }
+
       p {
         position: absolute;
         transform-origin: left center;
-        width: 50px;
+        width: 56px;
         text-align: center;
-        transition: 0.5s color;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        letter-spacing: 1px;
+        font-size: 14px;
+        white-space: nowrap;
+        text-shadow: 0 0 6px currentColor;
+        cursor: default;
+        backdrop-filter: blur(1px);
+        pointer-events: none;
       }
+
       .ck {
-        color: yellow;
+        color: #ffdf80 !important;
+        text-shadow:
+          0 0 12px #ffcc44,
+          0 0 20px #ffaa33,
+          0 0 8px orange !important;
+        font-weight: bold;
+        transform: scale(1.08);
+        display: inline-block;
+        filter: drop-shadow(0 0 3px gold);
       }
 
       .m {
-        color: rgba(255, 0, 0, 0.8);
+        color: #7bc5ff;
+        text-shadow: 0 0 8px #2f9eff;
       }
       .d {
-        color: rgba(255, 0, 0, 1);
+        color: #ffcd7e;
+        text-shadow: 0 0 8px #ffaa44;
       }
       .h {
-        color: rgba(255, 0, 0, 0.8);
+        color: #ff9a7a;
+        text-shadow: 0 0 8px #ff5e38;
       }
       .mm {
-        color: rgba(255, 0, 0, 0.8);
+        color: #a2f0b0;
+        text-shadow: 0 0 8px #3ad15a;
       }
       .center .s {
-        color: rgba(255, 0, 0, 0.8);
+        color: #ffb3dc;
+        text-shadow: 0 0 8px #ff69b4;
+      }
+
+      /* 罗盘装饰环 */
+      .compass-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 540px;
+        height: 540px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+          circle,
+          rgba(255, 200, 100, 0.06),
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 8;
+        filter: blur(8px);
+        animation: pulseGlow 4s infinite alternate;
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          opacity: 0.3;
+          width: 520px;
+          height: 520px;
+        }
+        100% {
+          opacity: 0.7;
+          width: 560px;
+          height: 560px;
+        }
+      }
+
+      .outer-ring-deco {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 480px;
+        height: 480px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 200, 120, 0.3);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 8;
+        box-shadow: 0 0 10px rgba(255, 180, 60, 0.15);
+      }
+      .outer-ring-deco::before {
+        content: "";
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        border-radius: 50%;
+        border: 1px dashed rgba(255, 190, 90, 0.2);
+      }
+      .outer-ring-deco::after {
+        content: "";
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        right: 24px;
+        bottom: 24px;
+        border-radius: 50%;
+        border: 1px dotted rgba(210, 180, 100, 0.15);
+      }
+
+      .core-jewel {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 32px;
+        height: 32px;
+        background: radial-gradient(circle, #ffefb0, #d6a13a);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 15;
+        box-shadow: 0 0 18px rgba(255, 200, 50, 0.6);
+        border: 1px solid rgba(255, 220, 120, 0.7);
+        pointer-events: none;
+      }
+      .core-jewel::after {
+        content: "⦿";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 14px;
+        color: #4a3512;
+        font-weight: bold;
+      }
+
+      /* ========= 寻龙分金 · 风水词牌 区域 ========= */
+      .fengshui-inscription {
+        position: absolute;
+        bottom: 28px;
+        left: 28px;
+        z-index: 20;
+        pointer-events: none;
+        font-family: "Segoe UI", "STKaiti", "楷体", "Microsoft YaHei", serif;
+        max-width: 320px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(12px);
+        border-radius: 48px;
+        padding: 12px 20px;
+        border-left: 4px solid #d4af37;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        transition: opacity 0.5s ease;
+      }
+
+      .poem-line {
+        font-size: 14px;
+        letter-spacing: 2px;
+        color: #f7e5b5;
+        text-shadow: 0 0 4px rgba(210, 150, 50, 0.5);
+        font-weight: 500;
+        line-height: 1.5;
+      }
+
+      .poem-sub {
+        font-size: 11px;
+        color: #c9b27c;
+        margin-top: 6px;
+        letter-spacing: 1px;
+        border-top: 1px dashed rgba(210, 180, 100, 0.4);
+        display: inline-block;
+        padding-top: 5px;
+        font-style: italic;
+      }
+
+      .compass-aphorism {
+        position: absolute;
+        top: 28px;
+        right: 28px;
+        z-index: 20;
+        pointer-events: none;
+        text-align: right;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(8px);
+        padding: 10px 18px;
+        border-radius: 32px;
+        border-right: 3px solid #e2b86b;
+        font-family: "STKaiti", "楷体", monospace;
+        max-width: 280px;
+      }
+
+      .aphorism-text {
+        font-size: 13px;
+        color: #eedd99;
+        letter-spacing: 2px;
+        font-weight: 500;
+        text-shadow: 0 0 3px #aa7c3c;
+      }
+
+      .aphorism-source {
+        font-size: 10px;
+        color: #b89a5c;
+        margin-top: 4px;
+      }
+
+      /* 右侧卦象点缀 */
+      .bagua-mark {
+        position: absolute;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-size: 18px;
+        letter-spacing: 8px;
+        color: rgba(210, 180, 100, 0.35);
+        font-family: monospace;
+        z-index: 15;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      .left-seal {
+        position: absolute;
+        bottom: 28px;
+        right: 28px;
+        font-size: 10px;
+        color: #8b7652;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: "STKaiti", monospace;
+        letter-spacing: 1px;
+        backdrop-filter: blur(4px);
+        pointer-events: none;
+        z-index: 15;
+      }
+
+      /* 响应式调整 */
+      @media (max-width: 600px) {
+        p {
+          font-size: 10px;
+          width: 44px;
+        }
+        .outer-ring-deco {
+          width: 380px;
+          height: 380px;
+        }
+        .compass-glow {
+          width: 400px;
+          height: 400px;
+        }
+        .core-jewel {
+          width: 24px;
+          height: 24px;
+        }
+        .fengshui-inscription {
+          max-width: 260px;
+          padding: 8px 14px;
+          bottom: 16px;
+          left: 16px;
+        }
+        .poem-line {
+          font-size: 11px;
+        }
+        .compass-aphorism {
+          top: 16px;
+          right: 16px;
+          padding: 6px 12px;
+        }
+        .aphorism-text {
+          font-size: 10px;
+        }
+        .bagua-mark {
+          font-size: 14px;
+          right: 6px;
+          letter-spacing: 5px;
+        }
+      }
+
+      @media (max-width: 450px) {
+        p {
+          font-size: 9px;
+          width: 38px;
+        }
+        .outer-ring-deco {
+          width: 310px;
+          height: 310px;
+        }
+        .compass-glow {
+          width: 320px;
+          height: 320px;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="center">
-      <div class="m"></div>
-      <div class="d"></div>
-      <div class="h"></div>
-      <div class="mm"></div>
-      <div class="s"></div>
+    <!-- 真实星空画布 -->
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- 寻龙分金 · 风水箴言模块 (与罗盘呼应) -->
+    <div class="fengshui-inscription" id="fengshuiBox">
+      <div class="poem-line" id="dynamicPoem">
+        寻龙分金看缠山，一重缠是一重关
+      </div>
+      <div class="poem-sub" id="dynamicSub">🔮 天星映照 · 时来运转</div>
     </div>
+
+    <div class="compass-aphorism">
+      <div class="aphorism-text" id="aphorismText">
+        关门如有八重险，不出阴阳八卦形
+      </div>
+      <div class="aphorism-source">——《撼龙经》</div>
+    </div>
+
+    <div class="bagua-mark">⚊⚋☯⚊⚋</div>
+    <div class="left-seal">✧ 天星罗盘 · 堪舆定辰 ✧</div>
+
+    <!-- 时钟装饰层 (保留原始所有结构) -->
+    <div class="clock-wrapper">
+      <div class="compass-glow"></div>
+      <div class="outer-ring-deco"></div>
+      <div class="core-jewel"></div>
+
+      <div class="center">
+        <div class="m"></div>
+        <div class="d"></div>
+        <div class="h"></div>
+        <div class="mm"></div>
+        <div class="s"></div>
+      </div>
+    </div>
+
     <script>
-      let is = 0;
+      // ========================= 1. 原始时钟逻辑 (完全保留) =========================
       let m = document.querySelector(".m");
       let d = document.querySelector(".d");
       let h = document.querySelector(".h");
       let mm = document.querySelector(".mm");
       let s = document.querySelector(".s");
-      addText(m, 12, 30, "月");
-      addText(d, 31, 65, "日");
-      addText(h, 24, 100, "时");
-      addText(mm, 60, 135, "分", true);
-      addText(s, 60, 170, "秒");
 
       function addText(dom, max, trans, txt, ck) {
         for (let i = 0; i < max; i++) {
           let pm = document.createElement("p");
           pm.innerHTML = (ck ? i : i + 1) + txt;
-          pm.style.transform = `rotate(${
-            i * (360 / max)
-          }deg) translateX(${trans}px)`;
+          pm.style.transform = `rotate(${i * (360 / max)}deg) translateX(${trans}px)`;
           dom.appendChild(pm);
         }
       }
+
+      addText(m, 12, 30, "月");
+      addText(d, 31, 65, "日");
+      addText(h, 24, 100, "时");
+      addText(mm, 60, 135, "分", true);
+      addText(s, 60, 170, "秒");
 
       setInterval(() => {
         let date = new Date();
@@ -112,6 +455,323 @@
         });
         p[dom == m ? timer : timer - 1].classList.add("ck");
       }
+
+      // 核心宝石动态光晕
+      setInterval(() => {
+        const jewel = document.querySelector(".core-jewel");
+        if (jewel) {
+          const sec = new Date().getSeconds();
+          jewel.style.boxShadow = `0 0 ${12 + sec * 0.6}px rgba(255, 200, 70, 0.7)`;
+        }
+      }, 300);
+
+      // ========================= 2. 真实星空引擎 (深邃闪烁 + 视差) =========================
+      const canvas = document.getElementById("starsCanvas");
+      const ctx = canvas.getContext("2d");
+      let width, height;
+      let stars = [];
+      let deepStars = [];
+      let currentParallaxX = 0,
+        currentParallaxY = 0;
+      let targetParallaxX = 0,
+        targetParallaxY = 0;
+      let animationFrameId = null;
+
+      const STAR_COUNT = 850;
+      const DEEP_STAR_COUNT = 400;
+
+      class Star {
+        constructor(x, y, radius, baseBrightness, twinkleSpeed, colorTemp) {
+          this.x = x;
+          this.y = y;
+          this.radius = radius;
+          this.baseBrightness = baseBrightness;
+          this.twinkleSpeed = twinkleSpeed;
+          this.twinklePhase = Math.random() * Math.PI * 2;
+          this.colorTemp = colorTemp;
+        }
+        getCurrentBrightness(time) {
+          const twinkle =
+            0.65 +
+            0.35 *
+              Math.sin(time * 0.0025 * this.twinkleSpeed + this.twinklePhase);
+          return Math.min(0.95, this.baseBrightness * twinkle);
+        }
+      }
+
+      function initStars() {
+        stars = [];
+        deepStars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+          let x = Math.random();
+          let y = Math.random();
+          if (Math.random() < 0.4) y = 0.3 + Math.random() * 0.4;
+          const radius = 0.6 + Math.random() * 2.2;
+          const baseBrightness = 0.3 + Math.random() * 0.7;
+          const twinkleSpeed = 0.6 + Math.random() * 1.5;
+          const colorTemp = Math.random();
+          stars.push(
+            new Star(x, y, radius, baseBrightness, twinkleSpeed, colorTemp),
+          );
+        }
+        for (let i = 0; i < DEEP_STAR_COUNT; i++) {
+          const x = Math.random();
+          const y = Math.random();
+          const radius = 0.3 + Math.random() * 0.9;
+          const baseBrightness = 0.15 + Math.random() * 0.3;
+          const twinkleSpeed = 0.2 + Math.random() * 0.8;
+          deepStars.push(
+            new Star(x, y, radius, baseBrightness, twinkleSpeed, 0.5),
+          );
+        }
+      }
+
+      function drawStars(ctx, width, height, time, offX, offY) {
+        for (let star of deepStars) {
+          let x = star.x * width;
+          let y = star.y * height;
+          if (offX !== 0 || offY !== 0) {
+            x += offX * 0.8;
+            y += offY * 0.5;
+            if (x < 0) x += width;
+            if (x > width) x -= width;
+            if (y < 0) y += height;
+            if (y > height) y -= height;
+          }
+          const brightness = star.getCurrentBrightness(time) * 0.7;
+          ctx.beginPath();
+          ctx.arc(x, y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(210, 210, 230, ${brightness * 0.6})`;
+          ctx.fill();
+        }
+        for (let star of stars) {
+          let x = star.x * width;
+          let y = star.y * height;
+          if (offX !== 0 || offY !== 0) {
+            x += offX * 1.2;
+            y += offY * 0.9;
+            if (x < 0) x += width;
+            if (x > width) x -= width;
+            if (y < 0) y += height;
+            if (y > height) y -= height;
+          }
+          const brightness = star.getCurrentBrightness(time);
+          let r, g, b;
+          if (star.colorTemp < 0.33) {
+            r = 180 + 40 * brightness;
+            g = 200 + 55 * brightness;
+            b = 235 + 20 * brightness;
+          } else if (star.colorTemp < 0.66) {
+            r = 210 + 45 * brightness;
+            g = 215 + 40 * brightness;
+            b = 220 + 35 * brightness;
+          } else {
+            r = 245 + 10 * brightness;
+            g = 210 + 45 * brightness;
+            b = 150 + 50 * brightness;
+          }
+          ctx.beginPath();
+          ctx.arc(x, y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${brightness * 0.85})`;
+          ctx.fill();
+          if (star.radius > 1.5 && brightness > 0.5) {
+            ctx.beginPath();
+            ctx.arc(x, y, star.radius * 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${brightness * 0.25})`;
+            ctx.fill();
+          }
+        }
+      }
+
+      function drawMilkyWay(ctx, width, height) {
+        const grad = ctx.createLinearGradient(
+          0,
+          height * 0.4,
+          width,
+          height * 0.7,
+        );
+        grad.addColorStop(0, "rgba(40, 35, 70, 0.08)");
+        grad.addColorStop(0.5, "rgba(60, 50, 85, 0.1)");
+        grad.addColorStop(1, "rgba(25, 20, 45, 0.05)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+        for (let i = 0; i < 35; i++) {
+          const x = (Math.sin(i * 17) * 0.5 + 0.5) * width;
+          const y = (Math.cos(i * 13) * 0.3 + 0.5) * height;
+          const rad = 80 + (i % 3) * 40;
+          const grd = ctx.createRadialGradient(x, y, 0, x, y, rad);
+          grd.addColorStop(0, `rgba(80, 70, 130, 0.04)`);
+          grd.addColorStop(1, `rgba(30, 25, 60, 0)`);
+          ctx.fillStyle = grd;
+          ctx.fillRect(0, 0, width, height);
+        }
+      }
+
+      function updateParallax() {
+        currentParallaxX += (targetParallaxX - currentParallaxX) * 0.08;
+        currentParallaxY += (targetParallaxY - currentParallaxY) * 0.08;
+      }
+
+      function onMouseMove(e) {
+        const rect = canvas.getBoundingClientRect();
+        const rx = (e.clientX - rect.left) / rect.width;
+        const ry = (e.clientY - rect.top) / rect.height;
+        targetParallaxX = (rx - 0.5) * 35;
+        targetParallaxY = (ry - 0.5) * 22;
+      }
+
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      function animateStars(timestamp) {
+        if (!ctx) return;
+        updateParallax();
+        ctx.clearRect(0, 0, width, height);
+        const grad = ctx.createLinearGradient(0, 0, 0, height);
+        grad.addColorStop(0, "#04060f");
+        grad.addColorStop(0.5, "#070b17");
+        grad.addColorStop(1, "#010103");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+        drawMilkyWay(ctx, width, height);
+        drawStars(
+          ctx,
+          width,
+          height,
+          timestamp,
+          currentParallaxX,
+          currentParallaxY,
+        );
+        animationFrameId = requestAnimationFrame(animateStars);
+      }
+
+      function initStarfield() {
+        resizeCanvas();
+        initStars();
+        canvas.addEventListener("mousemove", onMouseMove);
+        canvas.addEventListener("mouseleave", () => {
+          targetParallaxX = 0;
+          targetParallaxY = 0;
+        });
+        window.addEventListener("resize", () => {
+          resizeCanvas();
+        });
+        animateStars(0);
+      }
+      initStarfield();
+
+      // ========================= 3. 寻龙分金 · 动态语句库 (定时切换，风水玄学) =========================
+      const poemsList = [
+        {
+          main: "寻龙分金看缠山，一重缠是一重关",
+          sub: "关门如有八重险，不出阴阳八卦形",
+        },
+        {
+          main: "龙脉潜渊气如虹，星斗垂光映九重",
+          sub: "天星地曜相呼应，坤舆乾象在心中",
+        },
+        {
+          main: "山形步甲寻踪迹，水法三合断吉凶",
+          sub: "分金定穴须明辨，玄空飞星造化功",
+        },
+        {
+          main: "气乘风则散，界水则止。古人聚之使不散",
+          sub: "行之使有止，故谓风水。得水为上，藏风次之",
+        },
+        {
+          main: "左青龙，右白虎，前朱雀，后玄武",
+          sub: "四象俱全，富贵绵延。察形势于毫末，定乾坤于掌间",
+        },
+        {
+          main: "金盘罗经定子午，贪狼巨门照天枢",
+          sub: "破军禄存随星转，辅弼文曲入中图",
+        },
+        {
+          main: "山上龙神不下水，水里龙神不上山",
+          sub: "空位流神仔细辨，玄关一窍是真诠",
+        },
+        {
+          main: "一等地师观星斗，二等地师看水口",
+          sub: "三等地师满山走，寻龙诀里藏春秋",
+        },
+        {
+          main: "入山寻水口，登穴看明堂。龙分两片阴阳取",
+          sub: "水对三叉细认踪，金木水火土星峰",
+        },
+      ];
+
+      const aphorisms = [
+        { text: "分金差一线，富贵不相见", source: "《罗盘透解》" },
+        {
+          text: "颠颠倒，二十四山有珠宝；顺逆行，二十四山有火坑",
+          source: "《青囊奥语》",
+        },
+        {
+          text: "天星发龙，地脉成形。峦头为体，理气为用",
+          source: "《地理人子须知》",
+        },
+        { text: "乾坤艮巽号御街，四大尊神在内排", source: "《都天宝照经》" },
+        { text: "向首一星灾福柄，去来二口死生门", source: "《天玉经》" },
+        { text: "水是山家血脉精，害人利人速如神", source: "《雪心赋》" },
+        { text: "龙要合向向合水，水合三吉位", source: "《宝照经》" },
+      ];
+
+      let poemIndex = 0;
+      let aphIndex = 0;
+
+      function updateFengshuiText() {
+        const poemDiv = document.getElementById("dynamicPoem");
+        const subDiv = document.getElementById("dynamicSub");
+        const aphText = document.getElementById("aphorismText");
+        const aphSource = document.querySelector(".aphorism-source");
+
+        if (poemDiv) {
+          poemDiv.style.opacity = "0";
+          subDiv.style.opacity = "0";
+          setTimeout(() => {
+            const newPoem = poemsList[poemIndex % poemsList.length];
+            poemDiv.innerText = newPoem.main;
+            subDiv.innerText = "✧ " + newPoem.sub + " ✧";
+            poemDiv.style.opacity = "1";
+            subDiv.style.opacity = "1";
+          }, 300);
+          poemIndex++;
+        }
+
+        if (aphText) {
+          aphText.style.opacity = "0";
+          setTimeout(() => {
+            const newAph = aphorisms[aphIndex % aphorisms.length];
+            aphText.innerText = newAph.text;
+            if (aphSource) aphSource.innerText = "——《" + newAph.source + "》";
+            aphText.style.opacity = "1";
+          }, 280);
+          aphIndex++;
+        }
+      }
+
+      // 每14秒切换一次风水金句，增添神秘感
+      setInterval(() => {
+        updateFengshuiText();
+      }, 14000);
+
+      // 初始附加小触动，立即更新一次略有韵味
+      setTimeout(() => {
+        updateFengshuiText();
+      }, 1000);
+
+      // 加一些额外的悬浮细节
+      const styleMore = document.createElement("style");
+      styleMore.textContent = `
+      p { transition: all 0.2s ease; }
+      .fengshui-inscription, .compass-aphorism { transition: opacity 0.3s; }
+      .poem-line, #aphorismText { transition: opacity 0.3s; }
+    `;
+      document.head.appendChild(styleMore);
     </script>
   </body>
 </html>
