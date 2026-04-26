@@ -1,304 +1,490 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>主页</title>
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-    <!-- HTML -->
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="CSS/style.css" />
-    <link rel="stylesheet" href="CSS/bc.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>修仙·灵境通途 | 巷的洞天福地</title>
     <style>
-      .bc_mbl::before {
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #0c0e1a;
+        font-family:
+          "Segoe UI", "华文楷书", "Microsoft YaHei", "PingFang SC", "STKaiti",
+          serif;
+        color: #e2dfd8;
+        line-height: 1.5;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* 水墨云雾背景动画 */
+      body::before {
         content: "";
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-
-        /* replace background-image url with your image */
-        /* note that if you use a local file as the image you should replace the url like: '/path/to/image'  */
-        /*background-image: url(https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187.jpg?w=1272&h=848);*/
+        background:
+          radial-gradient(
+            ellipse at 30% 40%,
+            rgba(45, 55, 85, 0.6),
+            rgba(5, 8, 18, 0.9)
+          ),
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" opacity="0.15"><path fill="none" stroke="%2387a9c0" stroke-width="0.8" d="M0 400 Q300 350 600 400 T1200 380" stroke-dasharray="3 6"/><path fill="none" stroke="%236c8ea0" stroke-width="0.6" d="M0 500 Q250 470 550 510 T1200 490" stroke-dasharray="2 5"/><path fill="none" stroke="%23aac7d9" stroke-width="0.5" d="M200 200 Q500 160 800 210 T1100 190"/></svg>');
+        background-repeat: no-repeat;
         background-size: cover;
-        background-position: center;
-        filter: blur(20px);
-        opacity: 0.8;
-        z-index: -1;
+        pointer-events: none;
+        z-index: 0;
       }
 
-      span {
-        color: rgb(0, 255, 0);
-        font-size: 13px;
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* 仿古卷轴卡片 */
+      .scroll-card {
+        background: rgba(20, 25, 45, 0.55);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem 0.5rem 2rem 0.5rem;
+        box-shadow:
+          0 20px 35px -12px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 245, 215, 0.1);
+        border: 1px solid rgba(170, 200, 220, 0.3);
+        transition: all 0.4s;
+      }
+
+      .hermitage {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .master-info {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .avatar-container {
+        position: relative;
+      }
+
+      .avatar {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #c9b37c;
+        box-shadow:
+          0 0 0 3px rgba(201, 179, 124, 0.3),
+          0 12px 20px -6px black;
+        background: #2c2a2a;
+      }
+
+      .spiritual-name h1 {
+        font-size: 2.3rem;
+        font-weight: 500;
+        letter-spacing: 4px;
+        background: linear-gradient(135deg, #f3e7c9, #dac292, #b99e6b);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .dao-quote {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 60px;
+        padding: 0.2rem 1rem;
+        font-size: 0.85rem;
+        display: inline-block;
+        border-left: 2px solid #dbb46a;
+        font-style: italic;
+        margin-top: 8px;
+        transition: opacity 0.3s ease;
+      }
+
+      .tags {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .tag {
+        background: rgba(50, 60, 80, 0.6);
+        border-radius: 30px;
+        padding: 0.2rem 1rem;
+        font-size: 0.7rem;
+        border: 0.5px solid #bca36b;
+        backdrop-filter: blur(4px);
+      }
+
+      .courtyard-stats {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 0.6rem 1.4rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 300;
+        backdrop-filter: blur(4px);
+      }
+
+      .realm-section {
+        background: rgba(15, 22, 40, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 2rem;
+        padding: 1.5rem;
+        margin-bottom: 2.5rem;
+        border: 1px solid rgba(185, 158, 107, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .realm-title {
+        font-size: 1.8rem;
+        font-weight: 400;
+        border-left: 5px solid #e6c68b;
+        padding-left: 1rem;
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+        background: linear-gradient(120deg, #edd9b0, #c8aa6e);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        display: inline-block;
+      }
+
+      .link-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 1.2rem;
+        margin-top: 1rem;
+      }
+
+      .spell-link {
+        background: rgba(30, 35, 55, 0.7);
+        backdrop-filter: blur(8px);
+        border: 1px solid #a38855;
+        border-radius: 3rem;
+        padding: 0.7rem 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        color: #f2ecd8;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .spell-link:hover {
+        transform: translateY(-5px);
+        background: rgba(70, 80, 115, 0.9);
+        border-color: #e7c483;
+        color: #fff5e0;
+        box-shadow: 0 14px 25px -8px #00000066;
+      }
+
+      .spell-link .icon {
+        font-size: 1.3rem;
+        filter: drop-shadow(0 0 2px #dbb26e);
+      }
+
+      hr {
+        margin: 1rem 0 1.5rem;
+        border: none;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #d8bf84,
+          #b48c4c,
+          transparent
+        );
+      }
+
+      .footer-zen {
+        text-align: center;
+        font-size: 0.7rem;
+        margin-top: 2rem;
+        padding: 1rem;
+        color: #8d9bb0;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 60px;
+        backdrop-filter: blur(6px);
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 680px) {
+        .hermitage {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .realm-title {
+          font-size: 1.4rem;
+        }
+        .link-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @keyframes gentleFloat {
+        0% {
+          text-shadow: 0 0 0px rgba(215, 185, 110, 0);
+        }
+        100% {
+          text-shadow: 0 0 4px rgba(215, 185, 110, 0.5);
+        }
+      }
+      .spell-link {
+        animation: gentleFloat 3s infinite alternate;
       }
     </style>
   </head>
-
-  <body style="max-width: 768px; margin: auto">
-    <div class="bc_content">
-      <div class="bc-fluid">
-        <div class="bc-row bc-space10">
-          <div class="bc-xs12">
-            <div class="bc_mbl bc_box" id="bc_mobile_head">
-              <div class="bc-row">
-                <div class="bc-xs3">
-                  <img
-                    class="bc_mbl bc_box img-avatar"
-                    style="border-radius: 50%"
-                    src="img/logo.gif"
-                  />
-                </div>
-                <div class="bc-xs9">
-                  <div class="bc-xs12">
-                    <div id="bc_name">巷</div>
-                    <div id="bc_tip">
-                      Tips：
-                      <span id="yiyan_text"></span>
-                    </div>
-                  </div>
-                  <script src="js/yiyan.js"></script>
-                  <div class="bc-xs12">
-                    <a class="btn">标签：</a>
-                    <a class="btn btn-orange">社牛</a>
-                    <a class="btn btn-purple">野王</a>
-                    <a class="btn btn-green">可达鸭</a>
-                    <a class="btn btn-blue">ฅ՞•ﻌ•՞ฅ </a>
-                  </div>
-                  <div class="bc-xs12">
-                    <a class="btn">擅长：</a>
-                    <a class="btn btn-green">JavaScript</a>
-                    <a class="btn btn-yellow">html/css</a>
-                  </div>
-                </div>
-              </div>
+  <body>
+    <div class="container">
+      <!-- 洞府主人 -->
+      <div class="scroll-card hermitage">
+        <div class="master-info">
+          <div class="avatar-container">
+            <!-- QQ头像：使用QQ号2860364991 -->
+            <img
+              class="avatar"
+              src="https://q1.qlogo.cn/g?b=qq&nk=2860364991&s=100"
+              alt="avatar"
+              onerror="this.src = 'https://placehold.co/85x85?text=✨'"
+            />
+          </div>
+          <div>
+            <!-- 昵称：可在此处修改为您的道号 -->
+            <h1>· 巷 ·</h1>
+            <div class="dao-quote" id="yiyan_text">灵台无垢，自在逍遥</div>
+            <div class="tags">
+              <span class="tag"># 剑心通明</span>
+              <span class="tag"># 炼丹闲人</span>
+              <span class="tag"># 云游野王</span>
+              <span class="tag"># 符箓可达鸭</span>
+              <span class="tag">🌿 JavaScript / 灵阵</span>
             </div>
           </div>
         </div>
-        <div class="bc-row bc-space10">
-          <div class="bc-xs4">
-            <div class="bc_box bc_mbl bc_center">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-weixin"></use>
-              </svg>
-              巷
-            </div>
-          </div>
-          <div class="bc-xs4">
-            <div class="bc_box bc_mbl bc_center">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-QQ"></use>
-              </svg>
-              <a href="login/login.html">点击进入巷的未知领域</a>
-            </div>
-          </div>
-          <div class="bc-xs4">
-            <div class="bc_box bc_mbl bc_center">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-gitee"></use>
-              </svg>
-              巷
-            </div>
-          </div>
-        </div>
-        <div class="bc-row bc-space10">
-          <div class="bc-sm12">
-            <div class="bc_box bc_mbl">
-              <div class="bc_box bc_mbl">
-                <p>
-                  如果您喜欢我的网站，请将本站添加到收藏夹（快捷键<code>Ctrl+D</code>），并
-                  <a class="btn btn-green" target="_blank">设为浏览器主页</a>
-                  ，方便您的下次访问，感谢支持。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bc-row bc-space10">
-          <div class="bc-xs12">
-            <div class="bc_box bc_mbl">
-              <div class="bc-row">
-                <h3 class="bc-xs12 bc_box">娱乐网页区</h3>
-                <hr />
-              </div>
-
-              <div class="bc-row bc-space10" style="word-wrap: break-word">
-                <a
-                  href="./page/newyear.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    新年倒计时
-                  </div>
-                </a>
-                <a
-                  href="../page/aixindanmu.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    满眼是你
-                  </div>
-                </a>
-                <a
-                  href="page/luopan.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    罗盘时钟
-                  </div>
-                </a>
-                <a
-                  href="page/"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    新年烟花
-                  </div>
-                </a>
-                <a
-                  href="page/shengdan.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    好看的圣诞树
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bc-row bc-space10">
-          <div class="bc-xs12">
-            <div class="bc_box bc_mbl">
-              <div class="bc-row">
-                <h3 class="bc-xs12 bc_box">娱乐功能区</h3>
-                <hr />
-              </div>
-              <div class="bc-row bc-space10" style="word-wrap: break-word">
-                <a href="#" class="bc-xs6 bc-sm4 bc-md4 bc-lg4" target="_blank">
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    手机号查询
-                  </div>
-                </a>
-                <a
-                  href="page/qqbang.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    QQ绑定手机号
-                  </div>
-                </a>
-                <a
-                  href="page/phonebang.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    手机号绑定QQ
-                  </div>
-                </a>
-                <a
-                  href="page/wzry.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    王者低战力查询
-                  </div>
-                </a>
-                <a
-                  href="page/download.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    软件下载
-                  </div>
-                </a>
-                <a
-                  href="page/voice.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    AI语音
-                  </div> </a
-                ><a
-                  href="page/wuziqi.html"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    五子棋小游戏
-                  </div>
-                </a>
-                <a
-                  href="https://xiang.4everland.app/"
-                  class="bc-xs6 bc-sm4 bc-md4 bc-lg4"
-                  target="_blank"
-                >
-                  <div class="bc_a btn-orange bc_center">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-lianjie"></use>
-                    </svg>
-                    微信AI自动回复
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bc-row bc-space10">
-          <div class="bc-xs12">
-            <div class="bc_mbl bc_box" id="bc_foot">
-              2023-2024 版权所有 © 巷
-            </div>
-          </div>
+        <div class="courtyard-stats">
+          🧧 灵境法门 · 共 <span id="totalLinksCount">0</span> 处洞天
         </div>
       </div>
+
+      <!-- 动态加载所有链接 (来自JSON常量) -->
+      <div id="app">
+        <div class="realm-section">
+          <div class="realm-title">🎋 娱乐 · 幻游仙册</div>
+          <div id="entertainmentGrid" class="link-grid"></div>
+        </div>
+        <div class="realm-section">
+          <div class="realm-title">⚡ 灵符 · 妙法玄机</div>
+          <div id="functionalGrid" class="link-grid"></div>
+        </div>
+      </div>
+      <hr />
+      <div class="footer-zen">
+        灵墟深处 · 万法随心 | 修于太虚纪元 · 一言仙箓六息一轮
+      </div>
     </div>
+
+    <script>
+      // ======================= ✨ 修仙链接卷轴 (JSON 灵册) ✨ =======================
+      // 在此处修改链接：增删条目即可，无需其他操作。昵称请修改上方 h1 内的文字。
+      const DEFAULT_LINKS = {
+        // 娱乐网页区
+        entertainment: [
+          { name: "新年倒计时", url: "./page/newyear.html" },
+          { name: "满眼是你", url: "../page/aixindanmu.html" },
+          { name: "罗盘时钟", url: "page/luopan.html" },
+          //{ name: "新年烟花", url: "page/" },
+          { name: "好看的圣诞树", url: "page/shengdan.html" },
+          { name: "美女图片", url: "page/meinv.html" },
+        ],
+        // 娱乐功能区
+        functional: [
+          { name: "手机号查询", url: "#" },
+          { name: "QQ绑定手机号", url: "page/qqbang.html" },
+          { name: "手机号绑定QQ", url: "page/phonebang.html" },
+          { name: "王者低战力查询", url: "page/wzry.html" },
+          { name: "软件下载", url: "page/download.html" },
+          //{ name: "AI语音", url: "page/voice.html" },
+          { name: "五子棋小游戏", url: "page/wuziqi.html" },
+          { name: "微信AI自动回复", url: "https://xiang.4everland.app/" },
+        ],
+      };
+      // ====================================================================
+
+      // 仙人箴言库 (50句修仙句子)
+      const IMMORTAL_SAYINGS = [
+        "灵台清明处，自有道韵生。",
+        "凡尘万般法，不及一念归真。",
+        "云深不知处，剑起问天心。",
+        "修行路远，莫问归期；心若山海，自渡彼岸。",
+        "丹炉火未熄，星河已入怀。",
+        "一叶知秋意，一炁破虚玄。",
+        "山巅风冽，恰是飞升时。",
+        "道不远人，人自远道；静坐观心，万法皆明。",
+        "灵气缠身莫自傲，红尘炼心方为高。",
+        "袖中藏日月，指间渡春秋。",
+        "斩断三千烦恼丝，换来一缕逍遥风。",
+        "丹田养玉液，神游太虚天。",
+        "剑意凝霜寒，拂尘扫心尘。",
+        "入世修功德，出世证长生。",
+        "雷劫淬筋骨，心火炼真魂。",
+        "莫羡仙人乘鹤去，我自踏云逐日来。",
+        "一粒金丹吞入腹，始知我命不由天。",
+        "竹影扫阶尘不动，月轮穿海水无痕。",
+        "千年修行千年寂，一朝顿悟一朝天。",
+        "福地自有灵根在，洞天不锁有缘人。",
+        "心若浮云常自在，意如流水任东西。",
+        "松间煮茶听鹤唳，石上敲棋待月明。",
+        "九霄龙吟惊天变，一羽轻尘踏歌行。",
+        "三尺青锋斩因果，半卷黄庭渡众生。",
+        "红尘万千劫，历尽始见真。",
+        "紫府凝元气，金丹照太虚。",
+        "静坐无为处，灵光自现时。",
+        "踏破凌霄九万重，归来仍是少年容。",
+        "一壶浊酒醉星河，半世浮沉笑蹉跎。",
+        "灵鹤衔芝献瑞，仙猿献果呈祥。",
+        "碧落黄泉皆过客，唯留道心映乾坤。",
+        "拂尘扫去三千碍，明镜照出本我真。",
+        "御剑乘风来，除魔天地间。",
+        "山中无甲子，寒尽不知年。",
+        "一念动，风云变；一念静，万象空。",
+        "道法自然，无为而无所不为。",
+        "吸风饮露朝霞晚，炼气凝神日月长。",
+        "灵台方寸地，栽得菩提花。",
+        "心有山海，静而无边。",
+        "云鹤唳天惊俗梦，霜钟敲月醒尘心。",
+        "丹青绘尽山河色，笔墨书穷天地玄。",
+        "灵符一纸传心意，法剑三尺斩妖邪。",
+        "鼎炉炼就长生药，壶中别有日月天。",
+        "不羡鸳鸯不羡仙，只慕清风与明月。",
+        "坐忘尘寰事，行歌阆苑春。",
+        "灵泉洗髓凡胎换，仙果延年道骨成。",
+        "竹杖芒鞋轻胜马，一蓑烟雨任平生。",
+        "霞光万道披身暖，露珠千颗润丹田。",
+        "鹤舞松涛传道意，鹿鸣芝畔悟玄机。",
+        "太虚辽阔任遨游，一粒黍米藏九州。",
+      ];
+
+      // 一言轮播
+      let currentIndex = 0;
+      const yiyanElement = document.getElementById("yiyan_text");
+      function rotateYiyan() {
+        if (yiyanElement) {
+          yiyanElement.style.opacity = "0";
+          setTimeout(() => {
+            currentIndex = (currentIndex + 1) % IMMORTAL_SAYINGS.length;
+            yiyanElement.innerText = IMMORTAL_SAYINGS[currentIndex];
+            yiyanElement.style.opacity = "1";
+          }, 300);
+        }
+      }
+      // 初始化显示随机一句
+      function initYiyan() {
+        const randomIndex = Math.floor(Math.random() * IMMORTAL_SAYINGS.length);
+        currentIndex = randomIndex;
+        if (yiyanElement) {
+          yiyanElement.innerText = IMMORTAL_SAYINGS[currentIndex];
+          yiyanElement.style.opacity = "1";
+        }
+        setInterval(rotateYiyan, 6000);
+      }
+
+      // 渲染链接
+      function renderLinks() {
+        const entertainmentContainer =
+          document.getElementById("entertainmentGrid");
+        const functionalContainer = document.getElementById("functionalGrid");
+        if (!entertainmentContainer || !functionalContainer) return;
+
+        entertainmentContainer.innerHTML = "";
+        functionalContainer.innerHTML = "";
+
+        DEFAULT_LINKS.entertainment.forEach((link) => {
+          entertainmentContainer.appendChild(createSpellCard(link));
+        });
+        DEFAULT_LINKS.functional.forEach((link) => {
+          functionalContainer.appendChild(createSpellCard(link));
+        });
+
+        const total =
+          DEFAULT_LINKS.entertainment.length + DEFAULT_LINKS.functional.length;
+        const countSpan = document.getElementById("totalLinksCount");
+        if (countSpan) countSpan.innerText = total;
+      }
+
+      function createSpellCard(link) {
+        const a = document.createElement("a");
+        a.className = "spell-link";
+        a.href = link.url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+
+        const iconSpan = document.createElement("span");
+        iconSpan.className = "icon";
+        iconSpan.innerText = getImmortalIcon(link.name);
+
+        const textSpan = document.createElement("span");
+        textSpan.innerText = link.name;
+
+        a.appendChild(iconSpan);
+        a.appendChild(textSpan);
+
+        if (link.url === "#") {
+          a.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("✨ 此灵境尚未开启，静待道缘 ✨");
+          });
+        }
+        return a;
+      }
+
+      function getImmortalIcon(name) {
+        if (name.includes("新年") || name.includes("倒计时")) return "🎍";
+        if (name.includes("满眼") || name.includes("你")) return "🌸";
+        if (name.includes("罗盘") || name.includes("时钟")) return "🧭";
+        if (name.includes("烟花")) return "🎋";
+        if (name.includes("圣诞")) return "🌲";
+        if (name.includes("手机号")) return "📿";
+        if (name.includes("QQ")) return "🐉";
+        if (name.includes("王者")) return "🏮";
+        if (name.includes("软件")) return "🗡️";
+        if (name.includes("语音") || name.includes("AI")) return "🎋";
+        if (name.includes("五子棋")) return "♟️";
+        if (name.includes("微信")) return "💬";
+        return "🔮";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderLinks();
+        initYiyan();
+      });
+    </script>
   </body>
 </html>
