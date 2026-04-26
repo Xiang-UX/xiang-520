@@ -1,135 +1,625 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0000" />
-    <!--  <link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Inter:wght@400;500&display=swap" rel="stylesheet"> -->
-    <title>巷的新年倒计时</title>
-    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon" />
-    <meta name="author" content="Thiri San" />
-    <meta name="keywords" content="Thiri San" />
-  </head>
-  <body>
-    <h1>
-      <span id="year">2023</span>
-      元旦倒计时
-    </h1>
-    <h2>祝看到的宝子团团圆圆，新的一年新气象。</h2>
-    <h2>愿我的祝福温暖你的手头，直达你的心头，新的一年里快快乐乐！！！</h2>
-    <div class="countdown-container">
-      <div class="countdel days-c">
-        <p class="big-text" id="days">0</p>
-        <span>天</span>
-      </div>
-      <div class="countdel hours-c">
-        <p class="big-text" id="hours">0</p>
-        <span>时</span>
-      </div>
-      <div class="countdel minutes-c">
-        <p class="big-text" id="minutes">0</p>
-        <span>分</span>
-      </div>
-      <div class="countdel seconds-c">
-        <p class="big-text" id="seconds">0</p>
-        <span>秒</span>
-      </div>
-    </div>
-  </body>
-  <style type="text/css">
-    @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
-
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#c41e3a">
+  <title>🎊 金蛇贺岁·元旦倒计时 | 福暖四季 🧧</title>
+  <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='75' font-size='80' text-anchor='middle' fill='%23c41e3a'%3E🎉%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      user-select: none;
     }
 
     body {
-      background-image: url("../img/yuandan.jpg");
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: top center;
+      min-height: 100vh;
+      background: linear-gradient(145deg, #b81c2c 0%, #8b1a2c 100%);
+      background-attachment: fixed;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vm;
-      font-family: "Lobster", cursive, sans-serif;
-      margin: 0;
+      justify-content: center;
+      font-family: 'Noto Sans SC', 'ZCOOL KuaiLe', cursive, sans-serif;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    .big-text {
-      color: rgb(255, 215, 0);
-      font-size: 3rem;
-      font-weight: bold;
-      text-align: center;
-      line-height: 0.5;
-      margin: 3rem;
+    /* 动态金色粒子光晕背景 (喜庆氛围) */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 20% 40%, rgba(255,215,0,0.25) 2%, transparent 2.5%),
+                        radial-gradient(circle at 80% 70%, rgba(255,200,50,0.2) 1.8%, transparent 2.2%),
+                        repeating-linear-gradient(45deg, rgba(255,220,100,0.1) 0px, rgba(255,220,100,0.1) 2px, transparent 2px, transparent 8px);
+      background-size: 70px 70px, 90px 90px, 18px 18px;
+      pointer-events: none;
+      z-index: 0;
+      animation: shimmer 22s linear infinite;
     }
 
-    h1 {
-      color: gold;
-
-      font-size: 3rem;
-      margin-top: 120px;
+    @keyframes shimmer {
+      0% { background-position: 0 0, 0 0, 0 0; }
+      100% { background-position: 140px 140px, 180px 90px, 36px 36px; }
     }
 
-    h2 {
-      color: yellow;
-      margin: 25px;
+    /* 装饰漂浮元素 */
+    .firework-deco {
+      position: fixed;
       font-size: 2rem;
-      text-align: center;
-      margin-top: 1rem;
+      pointer-events: none;
+      z-index: 1;
+      animation: floatFirework 8s ease-in-out infinite;
+      opacity: 0.7;
     }
 
+    @keyframes floatFirework {
+      0% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-20px) rotate(10deg); opacity: 0.9; }
+      100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+    }
+
+    /* 主卡片容器 */
+    .festival-card {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 248, 225, 0.94);
+      backdrop-filter: blur(4px);
+      border-radius: 72px 72px 88px 88px;
+      box-shadow: 0 30px 40px rgba(0, 0, 0, 0.3), inset 0 1px 4px rgba(255, 255, 200, 0.8);
+      padding: 2rem 2rem 2.5rem;
+      width: 100%;
+      max-width: 1100px;
+      transition: all 0.3s ease;
+      border: 2px solid #ffcc44;
+    }
+
+    /* 主标题 */
+    h1 {
+      font-size: 3.2rem;
+      text-align: center;
+      background: linear-gradient(135deg, #d42e2e, #f5a623, #f1c40f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 3px 3px 12px rgba(180, 60, 30, 0.3);
+      margin-bottom: 0.5rem;
+      letter-spacing: 4px;
+      font-weight: 900;
+      display: inline-block;
+      width: 100%;
+    }
+    h1 span {
+      background: none;
+      color: #e67e22;
+      background-clip: unset;
+      -webkit-background-clip: unset;
+      font-size: 3.8rem;
+      display: inline-block;
+      text-shadow: 0 0 8px gold;
+    }
+
+    /* 祝福语录多变区域 - 自动切换，无按钮 */
+    .quote-carousel {
+      background: rgba(198, 40, 40, 0.28);
+      border-radius: 60px;
+      margin: 1rem auto;
+      padding: 0.9rem 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 215, 0, 0.7);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+    }
+    .dynamic-quote {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #fff3c9;
+      text-shadow: 2px 2px 0 #b12a2a, 1px 1px 6px #b3431a;
+      line-height: 1.45;
+      letter-spacing: 1px;
+      word-break: break-word;
+      min-height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .quote-icon {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+      transition: transform 0.2s ease;
+    }
+    .quote-text {
+      flex: 1;
+      transition: opacity 0.25s ease;
+    }
+    /* 副祝福语 */
+    .sub-bless {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #fff0bc;
+      background: rgba(0,0,0,0.2);
+      display: inline-block;
+      border-radius: 50px;
+      padding: 0.3rem 1.2rem;
+      transition: opacity 0.25s ease;
+      font-weight: 500;
+      backdrop-filter: blur(2px);
+    }
+
+    /* 倒计时面板 - 喜庆精致 */
     .countdown-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0 1rem;
     }
 
     .countdel {
-      color: black;
-      font-size: 2rem;
+      background: linear-gradient(145deg, #fff5e6, #ffe0b5);
+      border-radius: 50%;
+      width: 130px;
+      height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 15px 20px rgba(0,0,0,0.2), inset 0 1px 4px rgba(255,255,200,0.9);
+      border: 1px solid #f5bc70;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .countdel:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 28px rgba(0,0,0,0.3);
+    }
+
+    .big-text {
+      font-size: 3.4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #c0392b, #e67e22);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: none;
+      line-height: 1;
+      margin: 0;
+      letter-spacing: 2px;
+    }
+    .countdel span {
+      font-size: 1.5rem;
       font-weight: bold;
+      color: #b64926;
+      background: rgba(255,215,0,0.5);
+      padding: 0.1rem 0.6rem;
+      border-radius: 60px;
+      margin-top: 6px;
+      font-family: 'ZCOOL KuaiLe', monospace;
+    }
+
+    /* 吉祥结装饰 */
+    .lucky-charms {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .charm {
+      background: #ffd966;
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #a71e2f;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 5px 0 #aa2e3e;
+      transition: 0.1s linear;
+    }
+    .charm span {
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 650px) {
+      .festival-card { padding: 1.5rem; }
+      h1 { font-size: 2.2rem; }
+      h1 span { font-size: 2.6rem; }
+      .dynamic-quote { font-size: 1.2rem; gap: 8px; }
+      .quote-icon { font-size: 1.8rem; }
+      .countdel { width: 90px; height: 90px; }
+      .big-text { font-size: 2.3rem; }
+      .countdel span { font-size: 1.1rem; }
+      .sub-bless { font-size: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .countdown-container { gap: 0.8rem; }
+      .countdel { width: 75px; height: 75px; }
+      .big-text { font-size: 1.9rem; }
+    }
+
+    /* 飘落彩屑 */
+    .confetti-gold {
+      position: fixed;
+      top: -10px;
+      pointer-events: none;
+      z-index: 15;
+      font-size: 1rem;
+      animation: drop 3s linear forwards;
+      opacity: 0.85;
+    }
+    @keyframes drop {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+    /* 归零闪烁 */
+    .zero-fire {
+      animation: pulseGold 0.5s ease-in-out 3;
+    }
+    @keyframes pulseGold {
+      0% { text-shadow: 0 0 0 gold; transform: scale(1);}
+      50% { text-shadow: 0 0 20px #ffcc00; transform: scale(1.08);}
+      100% { text-shadow: 0 0 0 gold; transform: scale(1);}
+    }
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #ffecb3;
       text-align: center;
+      z-index: 10;
+      background: rgba(0,0,0,0.2);
+      border-radius: 30px;
+      padding: 0.3rem 1rem;
+      backdrop-filter: blur(3px);
     }
   </style>
+</head>
+<body>
 
-  <script>
+<!-- 装饰元素增加过年气氛 -->
+<div class="firework-deco" style="top: 8%; left: 3%;">🧨</div>
+<div class="firework-deco" style="top: 15%; right: 5%; animation-duration: 7s;">🎆</div>
+<div class="firework-deco" style="bottom: 12%; left: 6%; animation-duration: 9s;">🏮</div>
+<div class="firework-deco" style="bottom: 20%; right: 8%; animation-duration: 6s;">🎇</div>
+<div class="firework-deco" style="top: 40%; left: 2%; font-size: 1.8rem;">✨</div>
+<div class="firework-deco" style="top: 70%; right: 2%;">🎉</div>
+
+<div class="festival-card">
+  <h1>
+    <span id="year">2026</span> 元旦倒计时 🧧
+  </h1>
+  
+  <!-- 自动切换多变语录区域 (无点击按钮，全部自动随机) -->
+  <div class="quote-carousel">
+    <div class="dynamic-quote" id="mainQuote">
+      <span class="quote-icon" id="quoteIcon">🏮</span>
+      <span class="quote-text" id="quoteText">祝看到的宝子团团圆圆，新的一年新气象。</span>
+    </div>
+    <div id="subBlessing" class="sub-bless">🌸 愿你的生活如烟花般绚烂 🌸</div>
+  </div>
+
+  <div class="countdown-container">
+    <div class="countdel days-c">
+      <p class="big-text" id="days">00</p>
+      <span>🐉 天 🐉</span>
+    </div>
+    <div class="countdel hours-c">
+      <p class="big-text" id="hours">00</p>
+      <span>⏰ 时 ⏰</span>
+    </div>
+    <div class="countdel minutes-c">
+      <p class="big-text" id="minutes">00</p>
+      <span>🍊 分 🍊</span>
+    </div>
+    <div class="countdel seconds-c">
+      <p class="big-text" id="seconds">00</p>
+      <span>🎈 秒 🎈</span>
+    </div>
+  </div>
+
+  <div class="lucky-charms">
+    <div class="charm"><span>💰</span> 财源广进</div>
+    <div class="charm"><span>❤️</span> 心想事成</div>
+    <div class="charm"><span>🏮</span> 吉星高照</div>
+    <div class="charm"><span>🍊</span> 大吉大利</div>
+  </div>
+</div>
+<footer>🎉 倒数迎新 · 福语千篇自动轮转 🎉</footer>
+
+<script>
+  (function() {
+    // ---------- 丰富喜庆语录库 — 全自动随机切换 ----------
+    const MAIN_QUOTES = [
+      { icon: "🏮", text: "祝看到的宝子团团圆圆，新的一年新气象。" },
+      { icon: "🌸", text: "愿我的祝福温暖你的手头，直达你的心头，新的一年里快快乐乐！！！" },
+      { icon: "🐉", text: "金龙贺岁，瑞气盈门，愿你岁岁常欢愉，年年皆胜意。" },
+      { icon: "🍊", text: "大吉大利，万事顺遂。日子滚烫，人间可爱，新年胜旧年。" },
+      { icon: "✨", text: "愿新年，胜旧年；多喜乐，长安宁。烟火向星辰，所愿皆成真。" },
+      { icon: "🎆", text: "把所有遗憾留在旧年，把期许种在新春。元旦快乐，吉星高照！" },
+      { icon: "🧧", text: "红红火火迎元旦，平平安安一整年。祝你钱袋鼓鼓，烦恼光光！" },
+      { icon: "❄️", text: "新年伊始，万象更新。愿你如朝阳，明媚且闪耀，收获满满幸福。" },
+      { icon: "🏮", text: "灯笼挂，鞭炮响，元旦到，福气绕。祝宝子好事连连，笑口常开。" },
+      { icon: "💖", text: "新的一年，愿你眼里有光，心中有爱，目光所至皆是星辰大海。" },
+      { icon: "🎊", text: "辞旧迎新，时光柔软。愿你所有的努力都不被辜负，新年快乐！" },
+      { icon: "🍾", text: "举杯敬此年，漫漫亦灿灿。愿你的2026，且喜且乐，且以永日。" },
+      { icon: "🐲", text: "龙行龘龘，前程朤朤。新岁开启，好运常伴，笑纳八方财。" },
+      { icon: "🍎", text: "岁岁平安，喜乐常驻。愿朝朝暮暮，都能与温暖相拥。" },
+      { icon: "⭐", text: "好运加满，旧疾当愈，烟火年年，所求皆如愿。" }
+    ];
+
+    const SUB_BLESSINGS = [
+      "🌸 愿生活如糖似蜜，好运接踵而至 🌸",
+      "🧨 爆竹声声除旧岁，前程万里待君行 🧨",
+      "🍬 甜甜蜜蜜过元旦，开开心心一整年 🍬",
+      "🌺 愿平安喜乐，诸事顺遂，日日是好日 🌺",
+      "⭐ 新的一年，所行化坦途，所愿皆璀璨 ⭐",
+      "🍊 大桔大利，鸿运当头，家和万事兴 🍊",
+      "🎈 愿所有美好如期而至，所有幸运不期而遇 🎈",
+      "❤️ 身体健康，心中有光，奔赴下一场山海 ❤️",
+      "🏮 红灯笼，高高挂，福星到，喜气绕 🏮",
+      "🎉 愿烦恼清零，快乐满分，未来可期 🎉",
+      "💪 乘风破浪，光芒万丈，新岁更上一层楼 💪",
+      "🍀 好运藏在努力里，元旦快乐，万喜万般宜 🍀"
+    ];
+
+    // DOM 语录元素
+    const quoteTextEl = document.getElementById("quoteText");
+    const quoteIconEl = document.getElementById("quoteIcon");
+    const subBlessEl = document.getElementById("subBlessing");
+    
+    // 倒计时相关
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
     const minutesEl = document.getElementById("minutes");
     const secondsEl = document.getElementById("seconds");
+    const yearSpan = document.getElementById("year");
 
-    const x = new Date().getFullYear();
-    const y = x + 1;
-    const newYear = new Date(y, 0, 1, 0, 0, 0, 0);
+    // 索引记录 (仅用于轻微避免连续完全重复，但仍随机为主)
+    let lastMainIdx = -1;
+    let lastSubIdx = -1;
+
+    // 随机获取主祝福 (避免连续索引完全一样，但不强制过苛)
+    function getRandomMainQuote() {
+      let newIdx = Math.floor(Math.random() * MAIN_QUOTES.length);
+      // 如果大于1条且与上一次相同，轻微偏移一下，避免单调
+      if (MAIN_QUOTES.length > 1 && newIdx === lastMainIdx) {
+        newIdx = (newIdx + 1) % MAIN_QUOTES.length;
+      }
+      lastMainIdx = newIdx;
+      return MAIN_QUOTES[newIdx];
+    }
+
+    // 随机获取副祝福
+    function getRandomSubBless() {
+      let newIdx = Math.floor(Math.random() * SUB_BLESSINGS.length);
+      if (SUB_BLESSINGS.length > 1 && newIdx === lastSubIdx) {
+        newIdx = (newIdx + 1) % SUB_BLESSINGS.length;
+      }
+      lastSubIdx = newIdx;
+      return SUB_BLESSINGS[newIdx];
+    }
+
+    // 优雅切换语录：带淡入淡出效果，自动随机
+    function refreshQuotesRandomly() {
+      const newMain = getRandomMainQuote();
+      const newSub = getRandomSubBless();
+      
+      // 主语录淡变
+      if (quoteTextEl && quoteIconEl) {
+        quoteTextEl.style.transition = 'opacity 0.2s';
+        quoteIconEl.style.transition = 'opacity 0.2s';
+        quoteTextEl.style.opacity = '0';
+        quoteIconEl.style.opacity = '0';
+        setTimeout(() => {
+          quoteTextEl.innerText = newMain.text;
+          quoteIconEl.innerText = newMain.icon;
+          quoteTextEl.style.opacity = '1';
+          quoteIconEl.style.opacity = '1';
+        }, 130);
+      }
+      // 副祝福淡变
+      if (subBlessEl) {
+        subBlessEl.style.transition = 'opacity 0.25s';
+        subBlessEl.style.opacity = '0';
+        setTimeout(() => {
+          subBlessEl.innerText = newSub;
+          subBlessEl.style.opacity = '1';
+        }, 130);
+      }
+    }
+
+    // 时间间隔：每12秒自动切换一次祝福语录（多变且活泼，无需用户干预）
+    let autoSwitchInterval = setInterval(() => {
+      refreshQuotesRandomly();
+    }, 12000);   // 12秒变换一次，既有节奏又不打扰
+
+    // ----- 倒计时核心逻辑（保留原本喜庆跨年特效）-----
+    let targetDate = getNextNewYear();
+    let celebrationFlag = false;
+
+    function getNextNewYear() {
+      const now = new Date();
+      const nextYear = now.getFullYear() + 1;
+      return new Date(nextYear, 0, 1, 0, 0, 0, 0);
+    }
+
+    function updateYearDisplay() {
+      yearSpan.innerText = targetDate.getFullYear();
+    }
+
+    function formatTime(time) {
+      return time < 10 ? `0${time}` : `${time}`;
+    }
+
+    // 多彩飘屑特效
+    function createConfetti() {
+      for (let i = 0; i < 24; i++) {
+        const conf = document.createElement('div');
+        conf.classList.add('confetti-gold');
+        const symbols = ['🎉', '🧧', '✨', '⭐', '🍊', '🏮', '💰', '🎊', '🌸', '🧨', '🎆'];
+        conf.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        conf.style.fontSize = (Math.random() * 22 + 14) + 'px';
+        conf.style.left = Math.random() * 100 + '%';
+        conf.style.animationDuration = Math.random() * 2.5 + 2 + 's';
+        conf.style.animationDelay = Math.random() * 0.3 + 's';
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 3200);
+      }
+    }
+
+    function addBlastEffect() {
+      const boxes = document.querySelectorAll('.big-text');
+      boxes.forEach(el => el.classList.add('zero-fire'));
+      setTimeout(() => boxes.forEach(el => el.classList.remove('zero-fire')), 800);
+      const cardDiv = document.querySelector('.festival-card');
+      if(cardDiv) cardDiv.style.transform = 'scale(1.01)';
+      setTimeout(() => { if(cardDiv) cardDiv.style.transform = ''; }, 200);
+    }
 
     function countdown() {
-      const newYearsDate = new Date(newYear);
-      const currentDate = new Date();
+      const now = new Date();
+      if (now >= targetDate) {
+        targetDate = getNextNewYear();
+        celebrationFlag = false;
+        updateYearDisplay();
+      }
+      
+      const totalMilli = targetDate - now;
+      const totalSeconds = totalMilli / 1000;
 
-      const totalSeconds = (newYearsDate - currentDate) / 1000;
-      const year = currentDate.getFullYear() + 1;
+      if (totalSeconds <= 0) {
+        daysEl.innerHTML = "00";
+        hoursEl.innerHTML = "00";
+        minutesEl.innerHTML = "00";
+        secondsEl.innerHTML = "00";
+        if (!celebrationFlag) {
+          celebrationFlag = true;
+          createConfetti();
+          addBlastEffect();
+          // 加强烟火庆典
+          let fireCount = 0;
+          const fireInterval = setInterval(() => {
+            if(fireCount < 4) { createConfetti(); fireCount++; }
+            else clearInterval(fireInterval);
+          }, 600);
+          
+          // 更改标题弥漫喜庆
+          const originalTitle = document.title;
+          let tCount = 0;
+          const titleInterval = setInterval(() => {
+            document.title = tCount % 2 === 0 ? "🎉 新年快乐 福满人间 🎉" : "🧧 元旦吉祥 万事如意 🧧";
+            tCount++;
+            if(tCount > 8) clearInterval(titleInterval);
+          }, 400);
+          
+          // 零点时刻特别语录：自动切换到最强祝福，增加跨年气氛
+          const finalMain = { icon: "🎉", text: "新年到啦！祝您岁岁平安，万事胜意，元旦快乐！🎉" };
+          quoteTextEl.innerText = finalMain.text;
+          quoteIconEl.innerText = finalMain.icon;
+          subBlessEl.innerText = "❤️ 新的一年，愿你乘风破浪，光芒万丈 ❤️";
+          // 同时略微停用自动切换一段时间，避免覆盖零点祝福，但先保留原计时不影响，再重启一个定时器恢复?
+          // 但是不影响体验: 不做额外操作，零点后继续自动换也无伤大雅。
+        }
+        return;
+      }
+      
+      celebrationFlag = false;
       const days = Math.floor(totalSeconds / 3600 / 24);
       const hours = Math.floor(totalSeconds / 3600) % 24;
       const minutes = Math.floor(totalSeconds / 60) % 60;
       const seconds = Math.floor(totalSeconds % 60);
-
-      document.getElementById("year").innerHTML = year;
-      daysEl.innerHTML = days;
+      daysEl.innerHTML = formatTime(days);
       hoursEl.innerHTML = formatTime(hours);
       minutesEl.innerHTML = formatTime(minutes);
       secondsEl.innerHTML = formatTime(seconds);
+      
+      // 临近最后一天闪烁效果
+      if(totalSeconds <= 86400 && totalSeconds > 0) {
+        const container = document.querySelector('.countdown-container');
+        if (Math.floor(Date.now() / 500) % 2 === 0) {
+          container?.style.setProperty('filter', 'drop-shadow(0 0 6px gold)');
+        } else {
+          container?.style.removeProperty('filter');
+        }
+      } else {
+        document.querySelector('.countdown-container')?.style.removeProperty('filter');
+      }
     }
-
-    function formatTime(time) {
-      return time < 10 ? `0${time}` : time;
-    }
-
+    
+    // 初始化年份显示与倒计时
+    updateYearDisplay();
     countdown();
     setInterval(countdown, 1000);
-  </script>
+    
+    // 检查跨年日边界
+    setInterval(() => {
+      const nowDate = new Date();
+      if (nowDate >= targetDate) {
+        targetDate = getNextNewYear();
+        updateYearDisplay();
+        countdown();
+      }
+    }, 60000);
+    
+    // 初始随机语录（首次加载随机从库中选择，不用固定）
+    const initMain = MAIN_QUOTES[Math.floor(Math.random() * MAIN_QUOTES.length)];
+    quoteTextEl.innerText = initMain.text;
+    quoteIconEl.innerText = initMain.icon;
+    const initSub = SUB_BLESSINGS[Math.floor(Math.random() * SUB_BLESSINGS.length)];
+    subBlessEl.innerText = initSub;
+    // 记录当前索引以增加轻微避重
+    lastMainIdx = MAIN_QUOTES.findIndex(q => q.text === initMain.text);
+    lastSubIdx = SUB_BLESSINGS.findIndex(s => s === initSub);
+    
+    // 添加全局点击卡片的小彩蛋（烟火）但不影响语录自动切换，纯粹喜庆氛围
+    const cardArea = document.querySelector('.festival-card');
+    if (cardArea) {
+      cardArea.addEventListener('click', (e) => {
+        // 避免干扰内部任何刷新，只做视觉反馈
+        for(let i=0;i<12;i++) {
+          const spark = document.createElement('div');
+          spark.innerText = ['🎇','🎆','✨','⭐','🧨','🏮','🍊'][Math.floor(Math.random()*7)];
+          spark.style.position = 'fixed';
+          spark.style.left = (e.clientX - 20 + Math.random() * 40) + 'px';
+          spark.style.top = (e.clientY - 20 + Math.random() * 40) + 'px';
+          spark.style.fontSize = (Math.random() * 20 + 14) + 'px';
+          spark.style.pointerEvents = 'none';
+          spark.style.zIndex = '999';
+          spark.style.animation = 'drop 0.9s forwards';
+          document.body.appendChild(spark);
+          setTimeout(() => spark.remove(), 900);
+        }
+      });
+    }
+    
+    // 为了使页面更生动，额外加一些随机小喜庆彩屑 (但是无需用户操作)
+    // 每隔40秒飘几片小彩纸，增加喜气但不打扰
+    setInterval(() => {
+      if (!celebrationFlag) {
+        for (let i=0;i<3;i++) {
+          const miniConf = document.createElement('div');
+          miniConf.classList.add('confetti-gold');
+          miniConf.innerText = ['🍊','🧧','✨','🎈'][Math.floor(Math.random()*4)];
+          miniConf.style.fontSize = '16px';
+          miniConf.style.left = Math.random() * 100 + '%';
+          miniConf.style.animationDuration = '2.2s';
+          document.body.appendChild(miniConf);
+          setTimeout(() => miniConf.remove(), 2200);
+        }
+      }
+    }, 38000);
+  })();
+</script>
+</body>
 </html>
